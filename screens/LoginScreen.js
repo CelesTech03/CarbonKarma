@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 
 const LoginScreen = () => {
@@ -49,9 +49,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: 'Georgia',
     fontWeight: "800",
-    fontSize: "35px",
+    fontSize: 35,
     color: "seagreen",
     marginBottom: 40,
   },
