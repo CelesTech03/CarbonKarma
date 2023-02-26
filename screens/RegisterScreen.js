@@ -1,23 +1,23 @@
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = () => {
   return (
     // KeyboardAvoidingView = Prevents keyboard from blocking input fields
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text style={styles.title}>Carbon Karma</Text>
+        <Text style={styles.title}>Registration</Text>
 
       {/* Inputs View */}
       <View style={styles.inputContainer}>
+        <Text style={styles.labelText}>Full Name:</Text>
+        <TextInput placeholder="Full Name" style={styles.input} />
+
         <Text style={styles.labelText}>Email:</Text>
         <TextInput placeholder="Email" style={styles.input} />
+
+        <Text style={styles.labelText}>Username:</Text>
+        <TextInput placeholder="Username" style={styles.input} />
+
         <Text style={styles.labelText}>Password:</Text>
         <TextInput
           placeholder="Password"
@@ -29,22 +29,18 @@ const LoginScreen = ({ navigation }) => {
 
       {/* Buttons View */}
       <View style={styles.buttonContainer}>
-        {/* TouchableOpacity = A wrapper for making views respond properly to touches */}
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
-          style={[styles.button, styles.buttonOutline]}
+          onPress={() => { }}
+          style={[styles.button]}
         >
-          <Text style={styles.buttonOutlineText}>Register</Text>
+          <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
 
 // Screen styling
 const styles = StyleSheet.create({
