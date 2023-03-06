@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { React, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 
@@ -27,8 +27,21 @@ const AddFoodScreen = () => {
     {label: 'Yogurt', value: 'yogurt'},
     {label: 'Other', value: 'other'},
   ];
+
+  {/* For choosing which dropdown list to display; default is 'meat' for Meat list; set to 'veg' for Vegs list; set to 'dairy' for Dairy list */}
   const [items, setItems] = useState(meat);
-  const state = {value: 0,};
+
+  {/* For choosing which button to highlight; default is 0 for Meat button; set to 1 for Vegs; set to 2 for Dairy */}
+  const [buttons, setButtons] = useState(0);
+  
+  {/* For updating food amounts on slider */}
+  const [amount, setAmount] = useState(1);
+
+  {/* For updating food amounts on slider */}
+  const [minAmount, setMinAmount] = useState(1);
+
+  {/* For updating food amounts on slider */}
+  const [maxAmount, setMaxAmount] = useState(30);
 
   return (
     <View style={styles.container} >
@@ -39,13 +52,16 @@ const AddFoodScreen = () => {
       
       {/* Buttons to choose type of food */}
       <View style={styles.foodContainer}>
-        <TouchableOpacity onPress={() => {setItems(meat); setValue('')}} style={styles.foodSideButton}>
+        <TouchableOpacity onPress={() =>{setItems(meat); setValue(''); setButtons(0); setValue(1); setMaxAmount(30);}}
+          style={[buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Meat</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setItems(veg); setValue('')}} style={styles.foodMidButton}>
+        <TouchableOpacity onPress={() => {setItems(veg); setValue(''); setButtons(1); setValue(1); setMaxAmount(20);}}
+          style={[buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Vegs</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setItems(dairy); ; setValue('')}} style={styles.foodSideButton}>
+        <TouchableOpacity onPress={() => {setItems(dairy); ; setValue(''); setButtons(2); setValue(1); setMaxAmount(15);}}
+          style={[buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Dairy</Text>
         </TouchableOpacity>
       </View>
@@ -68,12 +84,13 @@ const AddFoodScreen = () => {
       {/* Slider for food entry */}
       <View style={styles.sliderContainer}>
         <Slider
-          value={state.value}
-          onValueChange={value => this.setState({value})}
-          minimumValue={0}
-          maximumValue={10}
+          value={amount}
+          onValueChange={amount => setAmount(amount)}
+          minimumValue={minAmount}
+          maximumValue={maxAmount}
+          step={1}
         />
-        <Text>Value: {state.value}</Text>
+        <Text>Amount: {amount} lbs</Text>
       </View>
 
       {/* Button to submit food entry */}
@@ -122,22 +139,25 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     flexDirection: "row",
   },
-  foodSideButton: {
+  buttonSelected: {
     borderColor: "black",
     borderWidth: 1,
     color: "black",
+    backgroundColor: "#b9b9b9",
+    marginRight: "3%",
+    marginLeft: "3%",
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
   },
-  foodMidButton: {
+  buttonNotSelected: {
     borderColor: "black",
     borderWidth: 1,
     color: "black",
-    marginRight: "5%",
-    marginLeft: "5%",
+    marginRight: "3%",
+    marginLeft: "3%",
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 5,
