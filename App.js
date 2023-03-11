@@ -7,6 +7,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import Homepage from "./screens/Homepage";
 import AddFoodScreen from "./screens/AddFoodScreen";
+import AddTransportationScreen from "./screens/AddTransportationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="AddFood" component={AddFoodScreen} />
+        <Stack.Screen name="AddTransportation" component={AddTransportationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

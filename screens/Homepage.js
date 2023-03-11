@@ -12,6 +12,10 @@ const Homepage = ({ navigation }) =>  {
         style={styles.button}>
           <Text style={styles.buttonText}>Add Food Item</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("AddTransportation")} 
+        style={[styles.button, styles.buttonOutline]}>
+          <Text style={styles.buttonOutlineText}>Add Transportation Item</Text>
+        </TouchableOpacity>
       </View>      
     </KeyboardAvoidingView>
   );
