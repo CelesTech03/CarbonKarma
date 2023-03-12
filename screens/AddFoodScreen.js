@@ -1,11 +1,25 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { React, useState } from "react";
+import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 
 const AddFoodScreen = () => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  {/* For opening and closing dropdown menus */}
+  const [openFood, setOpenFood] = useState(false);
+  const [valueFood, setValueFood] = useState(null);
+
+  const [openLoc, setOpenLoc] = useState(false);
+  const [valueLoc, setValueLoc] = useState(null);
+
+  const onOpenFood = useCallback(() => {
+    setOpenLoc(false);
+  }, []);
+
+  const onOpenLoc = useCallback(() => {
+    setOpenFood(false);
+  }, []);
+
+  {/* Lists for dropdown menus */}
   const meat =[
     {label: 'Select an item', value: ''},
     {label: 'Chicken', value: 'chicken'},
@@ -26,6 +40,13 @@ const AddFoodScreen = () => {
     {label: 'Cheese', value: 'cheese'},
     {label: 'Yogurt', value: 'yogurt'},
     {label: 'Other', value: 'other'},
+  ];
+
+  const location = [
+    {label: 'Select a location', value: ''},
+    {label: 'Farmer\'s market', value: 'farmer'},
+    {label: 'Local grocery store', value: 'local'},
+    {label: 'Large national chain', value: 'chain'},
   ];
 
   {/* For choosing which dropdown list to display; default is 'meat' for Meat list; set to 'veg' for Vegs list; set to 'dairy' for Dairy list */}
@@ -52,15 +73,15 @@ const AddFoodScreen = () => {
       
       {/* Buttons to choose type of food */}
       <View style={styles.foodContainer}>
-        <TouchableOpacity onPress={() =>{setItems(meat); setValue(''); setButtons(0); setValue(1); setMaxAmount(30);}}
+        <TouchableOpacity onPress={() =>{setItems(meat); setValueFood(''); setValueLoc(''); setButtons(0); setAmount(1); setMaxAmount(30);}}
           style={[buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Meat</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setItems(veg); setValue(''); setButtons(1); setValue(1); setMaxAmount(20);}}
+        <TouchableOpacity onPress={() => {setItems(veg); setValueFood(''); setValueLoc(''); setButtons(1); setAmount(1); setMaxAmount(20);}}
           style={[buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Vegs</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setItems(dairy); ; setValue(''); setButtons(2); setValue(1); setMaxAmount(15);}}
+        <TouchableOpacity onPress={() => {setItems(dairy); ; setValueFood(''); setValueLoc(''); setButtons(2); setAmount(1); setMaxAmount(15);}}
           style={[buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Text >Dairy</Text>
         </TouchableOpacity>
@@ -69,12 +90,33 @@ const AddFoodScreen = () => {
       {/* Drop-down menu for food entry */}
       <View style={styles.dropdownContainer}>
         <DropDownPicker
-        open={open}
-        value={value}
+        placeholder="Select an item"
+        open={openFood}
+        onOpen={onOpenFood}
+        value={valueFood}
+        zIndex={2000}
+        zIndexInverse={1000}
         items={items}
-        setOpen={setOpen}
-        setValue={setValue}
+        setOpen={setOpenFood}
+        setValue={setValueFood}
         setItems={setItems}
+        onChangeValue={(value) => {
+          console.log(value);
+        }}
+        />
+      </View>
+
+      <View style={styles.dropdownContainer}>
+        <DropDownPicker
+        placeholder="Select a location"
+        open={openLoc}
+        onOpen={onOpenLoc}
+        value={valueLoc}
+        zIndex={1000}
+        zIndexInverse={2000}
+        items={location}
+        setOpen={setOpenLoc}
+        setValue={setValueLoc}
         onChangeValue={(value) => {
           console.log(value);
         }}
@@ -109,7 +151,7 @@ export default AddFoodScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: "20%",
+    marginTop: "10%",
     alignItems: "center",
   },
   title: {
@@ -165,17 +207,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropdownContainer: {
-    marginVertical: "7%",
+    marginTop: "7%",
     width: "80%",
   },
   sliderContainer: {
+    marginTop: "7%",
     width: "70%",
   },
   submitContainer: {
     width: "60%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: "7%",
   },
   submitButton: {
     backgroundColor: "white",
