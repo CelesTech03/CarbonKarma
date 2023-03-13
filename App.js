@@ -42,7 +42,7 @@ export default function App() {
         <Stack.Screen name="AddEnergy" component={AddEnergyScreen} />
       </Stack.Navigator>
       {console.log("App.js: This is the", screen, "screen")}
-      {(screen != "Register" && screen != "Login" && screen != "Onboarding") && <BottomNav/>}
+      {(screen != "" && screen != "Register" && screen != "Login" && screen != "Onboarding") && <BottomNav/>}
     </NavigationContainer>
   );
 
