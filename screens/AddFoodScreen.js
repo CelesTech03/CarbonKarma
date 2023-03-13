@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
+import BottomNav from "../components/BottomNav";
 
 const AddFoodScreen = () => {
   {/* For opening and closing dropdown menus */}
@@ -68,7 +69,7 @@ const AddFoodScreen = () => {
     <View style={styles.container} >
       <Text style={styles.title}>Add Food Item</Text>
       <View style={styles.imageContainer}>
-        <Image style={styles.image} source={require('../assets/carrot.png')}/>
+        <Image style={styles.image} source={require('../assets/carrot2.png')}/>
       </View>
       
       {/* Buttons to choose type of food */}
@@ -142,6 +143,8 @@ const AddFoodScreen = () => {
         </TouchableOpacity>
       </View>
     </View>
+
+
   );
 };
 
@@ -151,10 +154,10 @@ export default AddFoodScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: "10%",
     alignItems: "center",
   },
   title: {
+    marginTop: "10%",
     fontWeight: "400",
     fontSize: 35,
     color: "black",

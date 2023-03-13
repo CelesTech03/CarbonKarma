@@ -2,12 +2,12 @@ import { KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View } from "r
 import { React } from 'react'
 import styles from "./styles/AuthStyle"
 
-const Homepage = ({ navigation }) =>  {
+const LeaderboardScreen = ({ navigation }) =>  {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text>Score: 342</Text>    
+      <Text>This is the Leaderboard page.</Text>    
     </KeyboardAvoidingView>
   );
 };
 
-export default Homepage
+export default LeaderboardScreen
