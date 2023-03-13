@@ -59,4 +59,8 @@ export default StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  errorText: {
+    fontSize: 12,
+    color: "#FF0D10",
+  },
 });
