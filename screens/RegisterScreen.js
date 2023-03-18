@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import styles from "./styles/AuthStyle";
-import { auth } from "../config/firebase";
+import { auth, createUserDocument } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -41,13 +41,19 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   // Firebase Signup
-  function handleSignUp({ email, password }) {
+  function handleSignUp({ email, password, userName, fullName }) {
     auth
+      // Creates new user
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         navigation.navigate("Onboarding");
         console.log("Resgistered with:", user.email);
+        // Stores email, username, and fullname in Database
+        return createUserDocument(user, { email, userName, fullName });
+      })
+      .then(() => {
+        console.log("User document created successfully");
       })
       .catch((error) => alert(error.message));
   }
