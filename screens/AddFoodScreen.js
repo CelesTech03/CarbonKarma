@@ -2,13 +2,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
-import BottomNav from "../components/BottomNav";
+import { modifyUserDocument } from "../config/firebase";
 
 const AddFoodScreen = () => {
-  {/* For opening and closing dropdown menus */}
+  {/* For opening and closing food dropdown menus and saving value of chosen food */}
   const [openFood, setOpenFood] = useState(false);
   const [valueFood, setValueFood] = useState(null);
 
+  {/* For opening and closing loc dropdown menus and saving value of chosen loc */}
   const [openLoc, setOpenLoc] = useState(false);
   const [valueLoc, setValueLoc] = useState(null);
 
@@ -65,6 +66,18 @@ const AddFoodScreen = () => {
   {/* For updating food amounts on slider */}
   const [maxAmount, setMaxAmount] = useState(30);
 
+  function submitHandler() {
+    if (valueFood != "" && valueLoc != "" && valueFood != null && valueLoc != null) {
+      console.log("AddFoodScreen.js: Food:", valueFood);
+      console.log("AddFoodScreen.js: Location:", valueLoc);
+      amount[0] != undefined ? console.log("AddFoodScreen.js: Amount:", amount[0]) : 
+      console.log("AddFoodScreen.js: Amount:", amount);
+      modifyUserDocument({ valueFood, valueLoc, amount });
+    }
+    else
+      console.log("AddFoodScreen.js: Values not set");
+  }
+
   return (
     <View style={styles.container} >
       <Text style={styles.title}>Add Food Item</Text>
@@ -102,7 +115,7 @@ const AddFoodScreen = () => {
         setValue={setValueFood}
         setItems={setItems}
         onChangeValue={(value) => {
-          console.log(value);
+          //console.log("AddFoodScreen.js: Food:", value)
         }}
         />
       </View>
@@ -119,7 +132,7 @@ const AddFoodScreen = () => {
         setOpen={setOpenLoc}
         setValue={setValueLoc}
         onChangeValue={(value) => {
-          console.log(value);
+          //console.log("AddFoodScreen.js: Location:", location)
         }}
         />
       </View>
@@ -138,7 +151,7 @@ const AddFoodScreen = () => {
 
       {/* Button to submit food entry */}
       <View style={styles.submitContainer}>
-        <TouchableOpacity onPress={() => { }} style={styles.submitButton}>
+        <TouchableOpacity onPress={() => { submitHandler() }} style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Add</Text>
         </TouchableOpacity>
       </View>

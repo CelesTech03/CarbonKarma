@@ -35,7 +35,7 @@ const firestore = firebase.firestore();
 export const createUserDocument = async (user, additionalData) => {
   if (!user) return;
 
-  // Gets user reference with the path users/ (user colelction) and a unique user id
+  // Gets user reference with the path users/ (user collection) and a unique user id
   const userRef = firestore.doc(`users/${user.uid}`);
   // Fetches document at this location
   const snapshot = await userRef.get();
@@ -51,6 +51,31 @@ export const createUserDocument = async (user, additionalData) => {
         fullName,
         userName,
         createdAt: new Date(),
+      });
+    } catch(error) {
+      console.log('Error in creating user', error);
+    }
+  }
+}
+
+// Modifies existing user document (data)
+export const modifyUserDocument = async (additionalData) => {
+  // Gets user reference with the path users/ (user colelction) and a unique user id
+  const userRef = firestore.doc(`users/cpgqRKTwykOYQECZLeGSYIjPmTI3`);
+  // Fetches document at this location
+  const snapshot = await userRef.get();
+
+  // If there is a document (snapshot) of user then modify it
+  if (snapshot.exists) {
+    const {valueFood, valueLoc, amount} = additionalData;
+    console.log("firebase.js: ", additionalData);
+    try {
+      userRef.update({
+        //firstName: 'Ken',
+        food: valueFood,
+        location: valueLoc,
+        amount: amount[0],
+        modifiedAt: new Date(),
       });
     } catch(error) {
       console.log('Error in creating user', error);
