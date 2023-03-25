@@ -10,11 +10,11 @@ export default StyleSheet.create({
   title: {
     fontWeight: "800",
     fontSize: 35,
-    color: "seagreen",
+    color: "#00695C",
     marginBottom: 40,
   },
   labelText: {
-    color: "seagreen",
+    color: "#00695C",
     fontWeight: "700",
     fontSize: 16,
     marginLeft: 4,
@@ -37,7 +37,7 @@ export default StyleSheet.create({
     marginTop: 40,
   },
   button: {
-    backgroundColor: "seagreen",
+    backgroundColor: "#00695C",
     width: "100%",
     padding: 15,
     borderRadius: 10,
@@ -46,7 +46,7 @@ export default StyleSheet.create({
   buttonOutline: {
     backgroundColor: "white",
     marginTop: 5,
-    borderColor: "seagreen",
+    borderColor: "#00695C",
     borderWidth: 2,
   },
   buttonText: {
@@ -55,7 +55,7 @@ export default StyleSheet.create({
     fontSize: 16,
   },
   buttonOutlineText: {
-    color: "seagreen",
+    color: "#00695C",
     fontWeight: "700",
     fontSize: 16,
   },

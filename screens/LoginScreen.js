@@ -115,7 +115,7 @@ const LoginScreen = () => {
                 disabled={!isValid}
                 style={[
                   styles.button,
-                  { backgroundColor: isValid ? "seagreen" : "#A7F1A8" },
+                  { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },
                 ]}
               >
                 <Text style={styles.buttonText}>Login</Text>

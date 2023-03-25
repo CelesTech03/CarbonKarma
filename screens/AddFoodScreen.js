@@ -118,10 +118,8 @@ const AddFoodScreen = () => {
           //console.log("AddFoodScreen.js: Food:", value)
         }}
         />
-      </View>
-
-      <View style={styles.dropdownContainer}>
         <DropDownPicker
+        style={{ marginTop: "1.5%" }}
         placeholder="Select a location"
         open={openLoc}
         onOpen={onOpenLoc}
@@ -225,6 +223,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     marginTop: "7%",
     width: "80%",
+    zIndex: 100,
   },
   sliderContainer: {
     marginTop: "7%",

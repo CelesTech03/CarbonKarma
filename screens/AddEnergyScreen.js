@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     marginTop: "7%",
     width: "80%",
+    zIndex: 100,
   },
   sliderContainer: {
     marginTop: "7%",

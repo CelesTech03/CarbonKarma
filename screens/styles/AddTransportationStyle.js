@@ -24,6 +24,7 @@ export default StyleSheet.create({
     },
     dropDownContainer: {
         width: '80%',
+        zIndex: 100,
     },
     sliderContainer: {
         width: '80%',
