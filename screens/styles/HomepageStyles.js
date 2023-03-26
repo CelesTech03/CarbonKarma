@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     padding: 50,
     alignItems: "center",
-    marginTop: 60,
+    marginTop: 80,
   },
   header: {
     flexDirection: "column",

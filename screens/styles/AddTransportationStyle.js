@@ -31,7 +31,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         padding: 10,
-        marginTop: '30%',
+        marginTop: '10%',
         marginBottom: '10%',
         backgroundColor: 'white'
     },
