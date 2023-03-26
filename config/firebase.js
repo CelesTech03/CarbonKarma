@@ -2,6 +2,8 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { collection, doc, addDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import {API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID} from "@env"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -31,6 +33,9 @@ export { auth };
 
 const firestore = firebase.firestore();
 
+const db = getFirestore(app);
+export { db };
+
 // Creates new user document (data)
 export const createUserDocument = async (user, additionalData) => {
   if (!user) return;
@@ -59,26 +64,45 @@ export const createUserDocument = async (user, additionalData) => {
 }
 
 // Modifies existing user document (data)
-export const modifyUserDocument = async (additionalData) => {
-  // Gets user reference with the path users/ (user colelction) and a unique user id
-  const userRef = firestore.doc(`users/cpgqRKTwykOYQECZLeGSYIjPmTI3`);
-  // Fetches document at this location
-  const snapshot = await userRef.get();
+// export const modifyUserDocument = async (additionalData) => {
+//   // Gets user reference with the path users/ (user colelction) and a unique user id
+//   const userRef = firestore.doc(`users/cpgqRKTwykOYQECZLeGSYIjPmTI3`);
+//   // Fetches document at this location
+//   const snapshot = await userRef.get();
 
-  // If there is a document (snapshot) of user then modify it
-  if (snapshot.exists) {
-    const {valueFood, valueLoc, amount} = additionalData;
-    console.log("firebase.js: ", additionalData);
-    try {
-      userRef.update({
-        //firstName: 'Ken',
-        food: valueFood,
-        location: valueLoc,
-        amount: amount[0],
-        modifiedAt: new Date(),
-      });
-    } catch(error) {
-      console.log('Error in creating user', error);
-    }
+//   // If there is a document (snapshot) of user then modify it
+//   if (snapshot.exists) {
+//     const {valueFood, valueLoc, amount} = additionalData;
+//     console.log("firebase.js: ", additionalData);
+//     try {
+//       userRef.update({
+//         //firstName: 'Ken',
+//         food: valueFood,
+//         location: valueLoc,
+//         amount: amount[0],
+//         modifiedAt: new Date(),
+//       });
+//     } catch(error) {
+//       console.log('Error in creating user', error);
+//     }
+//   }
+// }
+
+
+export const addFoodOrder = async (amount, valueFood, valueLoc) => {
+  // Fetches current user
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
+
+  try {
+    // Create a new food order subcollection and add the data
+    const newFoodOrderRef = await addDoc(collection(currentUserDocRef, "foodOrders"), {
+      amount: amount[0],
+      food: valueFood,
+      location: valueLoc,
+    });
+    console.log("Firebase.js: New food order added with ID:", newFoodOrderRef.id);
+  } catch (error) {
+    console.error("Firebase.js: Error adding food order:", error);
   }
-}
+};

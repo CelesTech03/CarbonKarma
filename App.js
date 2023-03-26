@@ -24,10 +24,10 @@ export default function App() {
   //{(navigationRef.current != null && navigationRef.current.getCurrentRoute().name != "Register") && <BottomNav/>}
   //{console.log(navigationRef.current != null && navigationRef.current.getCurrentRoute().name)}
   return (
-    <NavigationContainer
+    <NavigationContainer 
     onStateChange={(state) => setScreen(state.routes[state.index].name)}>
-      <Stack.Navigator>
-        <Stack.Screen // options={{ headerShown: false }}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen 
           name="Login"
           component={LoginScreen}
         />
