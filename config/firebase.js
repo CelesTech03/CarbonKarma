@@ -106,3 +106,20 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
     console.error("Firebase.js: Error adding food order:", error);
   }
 };
+
+export const addEnergyEntry = async (amount, valueEnergy) => {
+  // Fetches current user
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
+
+  try {
+    // Create a new energy entry subcollection and add the data
+    const newEnergyEntryRef = await addDoc(collection(currentUserDocRef, "energyEntries"), {
+      amount: amount[0],
+      energy: valueEnergy,
+    });
+    console.log("Firebase.js: New energy entry added with ID:", newEnergyEntryRef.id);
+  } catch (error) {
+    console.error("Firebase.js: Error adding energy entry:", error);
+  }
+};
