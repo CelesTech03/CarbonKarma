@@ -1,9 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity, Button, Image } from "react-native";
 import { React, useState } from 'react';
-import styles from "./styles/OnboardStyles"
+import styles from "./styles/OnboardStyles";
+import { UpdateCar } from "../config/firebase";
 
 const FirstCar = () => {
     const [car, setCar] = useState(null)
+
+    async function submitCarHandler() {
+      if (car != null) {
+        console.log("Car: ", car)
+        UpdateCar(car);
+      } else 
+          console.log("Car is not updated.");
+    }
 
     return (
         <View>
@@ -19,6 +28,7 @@ const FirstCar = () => {
                 style = {styles.button}
                 onPress={() => {
                   setCar('Yes')
+                  submitCarHandler(car)
                   }}>
                     <Text style = {styles.buttonText}>Yes</Text>
                 </TouchableOpacity>
@@ -27,6 +37,7 @@ const FirstCar = () => {
                 style = {styles.button}
                 onPress={() => {
                   setCar('No')
+                  submitCarHandler(car)
                   }}>
                     <Text style = {styles.buttonText}>No</Text>
                 </TouchableOpacity>

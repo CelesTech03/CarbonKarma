@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import styles from "./styles/AddTransportationStyle";
+import { addTransport } from "../config/firebase";
 
 const AddTransportationScreen = () => {
     //values for dropdown
@@ -27,6 +28,17 @@ const AddTransportationScreen = () => {
     //values for submission result modal
     const [modalVisible, setModalVisible] = useState(false)
     const score = 500
+
+    async function submitTransportHandler() {
+        if (mileage != null) {
+          console.log("Mileage: ", mileage)
+          amount[0] != undefined
+            ? console.log("Method: ", method[0])
+            : console.log("Method: ", method);
+          addTransport(method, mileage);
+        } else 
+            console.log("Method is not set.");
+    }
 
     return (
         
@@ -71,7 +83,7 @@ const AddTransportationScreen = () => {
 
             <TouchableOpacity 
                 style={styles.button}
-                onPress={onSubmit}>
+                onPress={ () => submitTransportHandler() }>
                 <Text>Submit</Text>
             </TouchableOpacity>
 
