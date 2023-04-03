@@ -3,6 +3,7 @@ import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { modifyUserDocument } from "../config/firebase";
+import { addEnergyEntry } from "../config/firebase";
 
 const AddEnergyScreen = () => {
   {/* For opening and closing energy dropdown menus and saving value of chosen energy type */}
@@ -31,6 +32,7 @@ const AddEnergyScreen = () => {
       amount[0] != undefined ? console.log("AddEnergyScreen.js: Amount:", amount[0]) : 
       console.log("AddEnergyScreen.js: Amount:", amount);
       //modifyUserDocument({ valueEnergy, amount });
+      addEnergyEntry(amount, valueEnergy);
     }
     else
       console.log("AddEnergyScreen.js: Values not set");
