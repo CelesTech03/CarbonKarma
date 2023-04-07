@@ -30,12 +30,12 @@ const AddTransportationScreen = () => {
     const score = 500
 
     async function submitTransportHandler() {
-        if (mileage != null) {
-          console.log("Mileage: ", mileage)
-          amount[0] != undefined
-            ? console.log("Method: ", method[0])
-            : console.log("Method: ", method);
-          addTransport(method, mileage);
+        if (value != null) {
+          console.log("Method: ", value)
+          mileage[0] != undefined
+            ? console.log("Mileage: ", mileage[0])
+            : console.log("Mileage: ", mileage);
+          addTransport(value, mileage);
         } else 
             console.log("Method is not set.");
     }
@@ -69,7 +69,7 @@ const AddTransportationScreen = () => {
                         keyboardType= {"numeric"}
                         multiline={false}
                         inputMode = {'numeric'}
-                        value={String(mileage)}
+                        value={Number(mileage)}
                         onChangeText={value => setMileage(value)}
                         style={styles.sliderTextInput} />
                     <Text>miles</Text>

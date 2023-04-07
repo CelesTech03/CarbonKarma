@@ -17,7 +17,7 @@ const FirstCity = () => {
 
     async function submitCityHandler() {
       if (value != null) {
-        console.log("Address: ", city)
+        console.log("Address: ", value)
         UpdateCity(value);
       } else 
           console.log("City is not updated.");

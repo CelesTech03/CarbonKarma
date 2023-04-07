@@ -14,6 +14,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import AddEnergyScreen from "./screens/AddEnergyScreen";
+import FirstCity from "./screens/FirstCity";
 import { useState } from "react";
 
 const Stack = createNativeStackNavigator();

@@ -19,7 +19,7 @@ const FirstGas = () => {
 
     async function submitGasHandler() {
       if (value != null) {
-        console.log("Gas: ", gas)
+        console.log("Gas: ", value)
         UpdateGas(value);
       } else 
           console.log("Gas is not updated.");

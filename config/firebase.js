@@ -107,7 +107,7 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
   }
 };
 
-// Creates new user document (data)
+
 export const addTransport = async (method, mileage) => {
   // Gets the current user
   const currentUserId = auth.currentUser.uid
@@ -116,8 +116,8 @@ export const addTransport = async (method, mileage) => {
   // Adds the User mileage to the subcollection
   try {
     const newTransportRef = await addDoc(collection(currentUserDocRef, "UserTransports"), {
-      method: method[0],
-      distance: mileage
+      method: method,
+      distance: mileage[0]
     })
     console.log("Added User Transport for ID: ", newTransportRef.id)
   } catch (error) {
