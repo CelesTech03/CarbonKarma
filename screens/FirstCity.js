@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { React, useState } from 'react';
 import DropDownPicker from "react-native-dropdown-picker";
+import { UpdateCity } from "../config/firebase";
 
 const FirstCity = () => {
     {/* Set Up for City dropper */}
@@ -13,6 +14,14 @@ const FirstCity = () => {
         {label: 'New York City', value: 'New York City'},
         {label: 'Staten Island', value: 'Staten Island'}
     ])
+
+    async function submitCityHandler() {
+      if (value != null) {
+        console.log("Address: ", value)
+        UpdateCity(value);
+      } else 
+          console.log("City is not updated.");
+    }
 
     return (
         <View style = {styles.container}>
@@ -30,8 +39,8 @@ const FirstCity = () => {
                     setOpen = {setOpen}
                     setValue = {setValue}
                     placeholder = 'Select City: '
-                    onChangeValue = {(value) => {
-                      console.log(value)
+                    onChangeValue = {() => {
+                      submitCityHandler()
                     }}/>
                 </View>
     

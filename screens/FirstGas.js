@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { React, useState } from 'react';
 import DropDownPicker from "react-native-dropdown-picker";
+import { UpdateGas } from "../config/firebase";
 
 const FirstGas = () => {
     {/* Set Up for Gas dropper */}
@@ -16,6 +17,14 @@ const FirstGas = () => {
         {label: '30+', value: '30+'}
     ])
 
+    async function submitGasHandler() {
+      if (value != null) {
+        console.log("Gas: ", value)
+        UpdateGas(value);
+      } else 
+          console.log("Gas is not updated.");
+    }
+
     return (
         <View>
             <Text style = {styles.text}>How many gallons of gas do you use?</Text>
@@ -29,8 +38,8 @@ const FirstGas = () => {
                 setValue = {setValue}
                 setItems = {setItems}
                 placeholder = '0'
-                onChangeValue = {(value) => {
-                  console.log(value)
+                onChangeValue = {() => {
+                  submitGasHandler(value)
                 }}/>
             </View>
 

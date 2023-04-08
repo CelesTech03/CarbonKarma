@@ -1,9 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity, Button, Image } from "react-native";
 import { React, useState } from 'react';
-import styles from "./styles/OnboardStyles"
+import styles from "./styles/OnboardStyles";
+import { UpdateSolar } from "../config/firebase";
 
 const FirstSolar = () => {
     const [solar, setSolar] = useState(null)
+
+    async function submitSolarHandler() {
+      if (solar != null) {
+        console.log("Solar: ", solar)
+        UpdateSolar(solar);
+      } else 
+          console.log("Solar is not updated.");
+    }
 
     return (
       <View>
@@ -18,7 +27,8 @@ const FirstSolar = () => {
             <TouchableOpacity
             style = {styles.button}
             onPress={() => {
-              setCar('Yes')
+              setSolar('Yes')
+              submitSolarHandler(solar)
               }}>
                 <Text style = {styles.buttonText}>Yes</Text>
             </TouchableOpacity>
@@ -26,7 +36,8 @@ const FirstSolar = () => {
             <TouchableOpacity
             style = {styles.button}
             onPress={() => {
-              setCar('No')
+              setSolar('No')
+              submitSolarHandler(solar)
               }}>
                 <Text style = {styles.buttonText}>No</Text>
             </TouchableOpacity>
