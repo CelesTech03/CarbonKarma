@@ -47,7 +47,7 @@ const RegisterScreen = () => {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        navigation.navigate("FirstCity");
+        navigation.navigate("Onboarding");
         console.log("Resgistered with:", user.email);
         // Stores email, username, and fullname in Database
         return createUserDocument(user, { email, userName, fullName });

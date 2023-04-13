@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import styles from "./styles/AddTransportationStyle";
-import { addTransport } from "../config/firebase";
 
 const AddTransportationScreen = () => {
     //values for dropdown
@@ -29,25 +28,15 @@ const AddTransportationScreen = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const score = 500
 
-    async function submitTransportHandler() {
-        if (value != null) {
-          console.log("Method: ", value)
-          mileage[0] != undefined
-            ? console.log("Mileage: ", mileage[0])
-            : console.log("Mileage: ", mileage);
-          addTransport(value, mileage);
-        } else 
-            console.log("Method is not set.");
-    }
-
     return (
         
         <View style={styles.container}>
             <Text style={styles.title}>Add Transportation</Text>
-
-            <Image 
-                style={styles.image}
-                source={require("../assets/bus.png")}/>
+            <View style={styles.imageContainer}>
+                <Image 
+                    style={styles.image}
+                    source={require("../assets/bus2.png")}/>
+            </View>
 
             {/* dropdown to select the types of vehicles */}
             <View style={styles.dropDownContainer}>
@@ -69,7 +58,7 @@ const AddTransportationScreen = () => {
                         keyboardType= {"numeric"}
                         multiline={false}
                         inputMode = {'numeric'}
-                        value={Number(mileage)}
+                        value={String(mileage)}
                         onChangeText={value => setMileage(value)}
                         style={styles.sliderTextInput} />
                     <Text>miles</Text>
@@ -83,7 +72,7 @@ const AddTransportationScreen = () => {
 
             <TouchableOpacity 
                 style={styles.button}
-                onPress={ () => submitTransportHandler() }>
+                onPress={onSubmit}>
                 <Text>Submit</Text>
             </TouchableOpacity>
 
