@@ -12,7 +12,7 @@ export default StyleSheet.create({
         color: 'black',
         marginBottom: 20
     },
-    image: {
+    imageContainer: {
         borderRadius: 100,
         borderColor: 'black',
         borderWidth: 1,
@@ -20,7 +20,14 @@ export default StyleSheet.create({
         width: 150,
         height: 150,
         marginBottom: 20,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        alignItems: "center",
+    },
+    image: {
+        flex: 1,
+        borderRadius: 100,
+        width: "85%",
+        resizeMode: "center",
     },
     dropDownContainer: {
         width: '80%',

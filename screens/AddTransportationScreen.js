@@ -32,10 +32,11 @@ const AddTransportationScreen = () => {
         
         <View style={styles.container}>
             <Text style={styles.title}>Add Transportation</Text>
-
-            <Image 
-                style={styles.image}
-                source={require("../assets/bus.png")}/>
+            <View style={styles.imageContainer}>
+                <Image 
+                    style={styles.image}
+                    source={require("../assets/bus2.png")}/>
+            </View>
 
             {/* dropdown to select the types of vehicles */}
             <View style={styles.dropDownContainer}>
