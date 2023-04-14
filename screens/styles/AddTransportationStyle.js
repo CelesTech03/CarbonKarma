@@ -10,7 +10,10 @@ export default StyleSheet.create({
         fontWeight: '400',
         fontSize: 35,
         color: 'black',
-        marginBottom: 20
+        marginBottom: 20,
+        textAlign: 'center',
+        marginLeft: 5,
+        marginRight: 5
     },
     image: {
         borderRadius: 100,

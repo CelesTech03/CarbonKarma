@@ -4,17 +4,19 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { modifyUserDocument } from "../config/firebase";
 
+import { electricity_location, electricityVal } from "../score";
+
 const AddEnergyScreen = () => {
   {/* For opening and closing energy dropdown menus and saving value of chosen energy type */}
   const [openEnergy, setOpenEnergy] = useState(false);
   const [valueEnergy, setValueEnergy] = useState(null);
 
   {/* Lists for energy dropdown menu */}
-  const energy =[
-    {label: 'Select an item', value: ''},
-    {label: 'Gas', value: 'gas'},
-    {label: 'Electricity', value: 'electric'},
-  ];
+  const energy = [];
+  electricity_location.forEach(location => energy.push({
+    label: location,
+    value: location}
+  ))
 
   {/* For updating energy amounts on slider */}
   const [amount, setAmount] = useState(1);
@@ -31,6 +33,10 @@ const AddEnergyScreen = () => {
       amount[0] != undefined ? console.log("AddEnergyScreen.js: Amount:", amount[0]) : 
       console.log("AddEnergyScreen.js: Amount:", amount);
       //modifyUserDocument({ valueEnergy, amount });
+
+      //update electricity value and score stored in the local storage
+      electricityVal(valueEnergy, amount);
+      
     }
     else
       console.log("AddEnergyScreen.js: Values not set");
@@ -46,7 +52,7 @@ const AddEnergyScreen = () => {
       {/* Drop-down menu for energy entry */}
       <View style={styles.dropdownContainer}>
         <DropDownPicker
-        placeholder="Select an item"
+        placeholder="Select a location"
         open={openEnergy}
         value={valueEnergy}
         zIndex={2000}
@@ -69,7 +75,7 @@ const AddEnergyScreen = () => {
           maximumValue={maxAmount}
           step={1}
         />
-        <Text>Amount: {amount} MWh</Text>
+        <Text>Amount: {amount} kWh</Text>
       </View>
 
       {/* Button to submit energy entry */}

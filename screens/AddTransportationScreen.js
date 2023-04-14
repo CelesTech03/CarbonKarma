@@ -3,30 +3,42 @@ import React, { useState } from 'react';
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import styles from "./styles/AddTransportationStyle";
+import{vehicle_type, transVal} from "../score";
 
 const AddTransportationScreen = () => {
     //values for dropdown
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
-    const [method, setMethod] = useState([
-        {label: "Bus/Train", value: "bus_train"},
-        {label: "Car", value: "car"},
-        {label: "Walk/bike", value: "walk_bike"}
-    ])
+
+    const methods = []
+    vehicle_type.forEach(vehicle => methods.push({
+        label: vehicle,
+        value: vehicle}));
+
+    const [method, setMethod] = useState(methods);
 
     //values for slider
     const [mileage, setMileage] = useState(0)
-    const maxMileage = 10000
+    const maxMileage = 1000;
 
-    const onSubmit = () => {
-        setMileage(0)
-        setValue(null)
-        setModalVisible(true)
+    const [adjust, setAdjust] = useState(null);
+    const [submitText, setSubmitText] = useState('Submit');
+    const onSubmit = async () => {
+        setSubmitText("Submitting...");
+
+        //update transportation value and score stored in the local storage
+        //set the adjustment value that will be displayed after submission
+        setAdjust(await transVal(value, mileage)); 
+
+        //reset the screen after submission
+        setMileage(0);
+        setValue(null);
+        setModalVisible(true);
+        setSubmitText("Submit");
     }
     
     //values for submission result modal
     const [modalVisible, setModalVisible] = useState(false)
-    const score = 500
 
     return (
         
@@ -72,7 +84,7 @@ const AddTransportationScreen = () => {
             <TouchableOpacity 
                 style={styles.button}
                 onPress={onSubmit}>
-                <Text>Submit</Text>
+                <Text>{submitText}</Text>
             </TouchableOpacity>
 
             {/* display the result of the submission */}
@@ -82,7 +94,7 @@ const AddTransportationScreen = () => {
                 onRequestClose={() => setModalVisible(false)}>
                     <View style={styles.submissionResult}>
                         <Text style={styles.title}>Submission Success!</Text>
-                        <Text style={styles.title}>Your new score is {score}</Text>
+                        <Text style={styles.title}>The cost value is {adjust}</Text>
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => setModalVisible(false)}>

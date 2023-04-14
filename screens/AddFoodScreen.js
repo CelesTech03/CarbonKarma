@@ -4,6 +4,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { modifyUserDocument } from "../config/firebase";
 import { addFoodOrder } from "../config/firebase";
+import { meat_type, dairy_type, plant_type, foodVal, food_category } from "../score";
 
 const AddFoodScreen = () => {
   { /* For opening and closing food dropdown menus and saving value of chosen food */ }
@@ -23,27 +24,21 @@ const AddFoodScreen = () => {
   }, []);
 
   { /* Lists for dropdown menus */ }
-  const meat = [
-    { label: "Select an item", value: "" },
-    { label: "Chicken", value: "chicken" },
-    { label: "Pork", value: "pork" },
-    { label: "Beef", value: "beef" },
-    { label: "Fish", value: "fish" },
-  ];
-  const veg = [
-    { label: "Select an item", value: "" },
-    { label: "Carrot", value: "carrot" },
-    { label: "Tomato", value: "tomato" },
-    { label: "Potato", value: "potato" },
-    { label: "Other", value: "other" },
-  ];
-  const dairy = [
-    { label: "Select an item", value: "" },
-    { label: "Milk", value: "milk" },
-    { label: "Cheese", value: "cheese" },
-    { label: "Yogurt", value: "yogurt" },
-    { label: "Other", value: "other" },
-  ];
+  const meat= [];
+  const veg = [];
+  const dairy = [];
+  meat_type.forEach(type => meat.push({
+    label: type,
+    value: type
+  }));
+  plant_type.forEach(type => veg.push({
+    label: type,
+    value: type
+  }));
+  dairy_type.forEach(type => dairy.push({
+    label: type,
+    value: type
+  }));
 
   const location = [
     { label: "Select a location", value: "" },
@@ -81,6 +76,10 @@ const AddFoodScreen = () => {
         : console.log("AddFoodScreen.js: Amount:", amount);
       // modifyUserDocument({ valueFood, valueLoc, amount });
       addFoodOrder(amount, valueFood, valueLoc);
+
+      //update food value and score stored in the local storage
+      await foodVal(food_category[buttons], valueFood, (valueLoc == 'farmer'), amount); 
+
     } else console.log("AddFoodScreen.js: Values not set");
   }
 
