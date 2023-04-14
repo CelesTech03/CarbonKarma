@@ -28,7 +28,7 @@ export async function getStoredScore() {
 async function saveVal(val, type) {
     try {
         let vals = {
-            electricity: -1,
+            electricity: 0,
             food: 0,
             transportation: 0
         };
@@ -50,7 +50,7 @@ async function saveVal(val, type) {
 async function resetVals() {
     try {
         const vals = {
-            electricity: -1,
+            electricity: 0,
             food: 0,
             transportation: 0
         };
@@ -67,7 +67,7 @@ export async function addScore() {
     try {
         let last_add = Number(await SecureStore.getItemAsync("lastAddTime"));
         if(last_add == undefined) {
-            const new_score = updateScore(23);
+            const new_score = updateScore(150);
             if(new_score != undefined) {
                 await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
                 await resetVals();
@@ -78,13 +78,13 @@ export async function addScore() {
         const day = 24 * 60 * 60 * 1000;
         let num_of_days = Math.floor((Date.now() - last_add) / day);
         if(num_of_days > 0) {
-            const new_score = updateScore(23);
+            const new_score = updateScore(150);
             if(new_score != undefined) {
                 await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
                 await resetVals();
                 return new_score;
             }
-        } 
+        }
     } catch (error) {
         console.log(error);
     } 
@@ -108,6 +108,17 @@ async function updateScore(adjust) {
     }
 }
 
+// Reset the score; delete before release
+export async function resetScore() {
+    try {
+        await SecureStore.setItemAsync("score", String(150));
+        await resetVals();
+        console.log('score.js: resetScore has been called, remember to delete function before release');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //Emission factors for calculating food value.
 const meat_factor = {
     "poultry": [0.468, 0.525],
@@ -125,7 +136,7 @@ const dairy_factor = {
 };
 const food_factor = {
     "meat": meat_factor,
-    "grains/vegetable/fruit": plant_factor,
+    "plants": plant_factor,
     "dairy": dairy_factor
 };
 
@@ -151,9 +162,9 @@ export async function foodVal(category, type, location, price) {
     
         if(food_factor.hasOwnProperty(category)) {
             if(food_factor[category].hasOwnProperty(type)) {
-                let emission_factor = food_factor[category][type][(location ? 0 : 1)];
+                let emission_factor = food_factor[category][type][(location == 'farmer' ? 0 : 1)];
                 let converted_price = price * convert_rate;
-                let val = Math.round(emission_factor * converted_price) * -1;
+                let val = Math.round(emission_factor * converted_price*-10);
 
                 const new_score = await updateScore(val);
             
@@ -187,7 +198,7 @@ export async function transVal(vehicle, miles) {
     try {
         if(trans_factor.hasOwnProperty(vehicle)) {
             let emission_factor = trans_factor[vehicle];
-            let val = Math.round(emission_factor * miles) * -1;
+            let val = Math.round(emission_factor * miles*-10);
     
             const new_score = await updateScore(val);
     
@@ -219,7 +230,7 @@ export async function electricityVal(location, usage) {
         let converted_usage = Math.round(usage / 10) / 100;
         if(electricity_factor.hasOwnProperty(location)) {
             let emission_factor = electricity_factor[location];
-            let val = Math.round(emission_factor * converted_usage  * 0.453) * -1;
+            let val = Math.round(emission_factor * converted_usage  * 0.453*-10);
 
             const new_score = await updateScore(252 + val);
             

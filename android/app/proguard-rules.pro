@@ -8,9 +8,9 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # react-native-reanimated
--keep class com.swmansion.reanimated.** { *; }
--keep class com.facebook.react.turbomodule.** { *; }
--keep class io.invertase.firebase.** { *; }
--dontwarn io.invertase.firebase.**
+#-keep class com.swmansion.reanimated.** { *; }
+#-keep class com.facebook.react.turbomodule.** { *; }
+#-keep class io.invertase.firebase.** { *; }
+#-dontwarn io.invertase.firebase.**
 
 # Add any project specific keep options here:

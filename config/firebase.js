@@ -97,7 +97,7 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
   try {
     // Create a new food order subcollection and add the data
     const newFoodOrderRef = await addDoc(collection(currentUserDocRef, "foodOrders"), {
-      amount: amount[0],
+      amount: amount,
       food: valueFood,
       location: valueLoc,
     });

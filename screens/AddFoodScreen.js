@@ -2,17 +2,22 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
-import { modifyUserDocument } from "../config/firebase";
 import { addFoodOrder } from "../config/firebase";
+import { foodVal, getStoredScore, getStoredVal } from "../score";
+import { resetScore } from "../score"; // for resetting scores, delete before release
 
 const AddFoodScreen = () => {
   { /* For opening and closing food dropdown menus and saving value of chosen food */ }
   const [openFood, setOpenFood] = useState(false);
   const [valueFood, setValueFood] = useState(null);
 
-  { /* For opening and closing loc dropdown menus and saving value of chosen loc */ }
+  { /* For opening and closing loc dropdown menus and saving value of chosen loc.
+    Value is true if food was purchased from farmer's market, false otherwise*/ }
   const [openLoc, setOpenLoc] = useState(false);
   const [valueLoc, setValueLoc] = useState(null);
+
+  { /* For saving whether user is currently on Meat, Plants, or Dairy tab */ }
+  const [category, setCategory] = useState('meat');
 
   const onOpenFood = useCallback(() => {
     setOpenLoc(false);
@@ -25,31 +30,26 @@ const AddFoodScreen = () => {
   { /* Lists for dropdown menus */ }
   const meat = [
     { label: "Select an item", value: "" },
-    { label: "Chicken", value: "chicken" },
-    { label: "Pork", value: "pork" },
-    { label: "Beef", value: "beef" },
-    { label: "Fish", value: "fish" },
+    { label: "Poultry", value: "poultry" },
+    { label: "Seafood", value: "seafood" },
+    { label: "Other", value: "other meat" },
   ];
-  const veg = [
+  const plant = [
     { label: "Select an item", value: "" },
-    { label: "Carrot", value: "carrot" },
-    { label: "Tomato", value: "tomato" },
-    { label: "Potato", value: "potato" },
-    { label: "Other", value: "other" },
+    { label: "Grains", value: "grains" },
+    { label: "Vegetable", value: "vegetable" },
+    { label: "Fruit", value: "fruit" },
   ];
   const dairy = [
     { label: "Select an item", value: "" },
     { label: "Milk", value: "milk" },
     { label: "Cheese", value: "cheese" },
-    { label: "Yogurt", value: "yogurt" },
-    { label: "Other", value: "other" },
   ];
 
   const location = [
     { label: "Select a location", value: "" },
     { label: "Farmer's market", value: "farmer" },
-    { label: "Local grocery store", value: "local" },
-    { label: "Large national chain", value: "chain" },
+    { label: "Grocery store", value: "local" },
   ];
 
   { /* For choosing which dropdown list to display; default is 'meat' for Meat list; set to 'veg' for Vegs list; set to 'dairy' for Dairy list */ }
@@ -74,14 +74,26 @@ const AddFoodScreen = () => {
       valueFood != null &&
       valueLoc != null
     ) {
+      addFoodOrder(amount, valueFood, valueLoc);
+      const score_change = await foodVal(category, valueFood, valueLoc, amount);
+
+      console.log("AddFoodScreen.js: Category:", category);
       console.log("AddFoodScreen.js: Food:", valueFood);
       console.log("AddFoodScreen.js: Location:", valueLoc);
       amount[0] != undefined
-        ? console.log("AddFoodScreen.js: Amount:", amount[0])
-        : console.log("AddFoodScreen.js: Amount:", amount);
-      // modifyUserDocument({ valueFood, valueLoc, amount });
-      addFoodOrder(amount, valueFood, valueLoc);
+      ? console.log("AddFoodScreen.js: Amount:", amount[0])
+      : console.log("AddFoodScreen.js: Amount:", amount);
+      console.log("AddFoodScreen.js: Score change:", score_change);
+      console.log("AddFoodScreen.js: Current score", await getStoredScore());
+      console.log("AddFoodScreen.js: Val Summary", await getStoredVal());
+
     } else console.log("AddFoodScreen.js: Values not set");
+  }
+
+  // function to reset scores; delete before release
+  async function resetHandler() {
+    resetScore();
+    console.log('AddFoodScreen.js: scores reset, remember to delete button and function before release')
   }
 
   return (
@@ -101,6 +113,7 @@ const AddFoodScreen = () => {
             setButtons(0);
             setAmount(1);
             setMaxAmount(30);
+            setCategory('meat');
           }}
           style={[
             buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected,
@@ -110,18 +123,19 @@ const AddFoodScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setItems(veg);
+            setItems(plant);
             setValueFood("");
             setValueLoc("");
             setButtons(1);
             setAmount(1);
             setMaxAmount(20);
+            setCategory('plants');
           }}
           style={[
             buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected,
           ]}
         >
-          <Text>Vegs</Text>
+          <Text>Plants</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -131,6 +145,7 @@ const AddFoodScreen = () => {
             setButtons(2);
             setAmount(1);
             setMaxAmount(15);
+            setCategory('dairy');
           }}
           style={[
             buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected,
@@ -178,12 +193,12 @@ const AddFoodScreen = () => {
       <View style={styles.sliderContainer}>
         <Slider
           value={amount}
-          onValueChange={(amount) => setAmount(amount)}
+          onValueChange={(amount) => setAmount(Math.round(amount*100)/100)}
           minimumValue={minAmount}
           maximumValue={maxAmount}
-          step={1}
+          step={0.01}
         />
-        <Text>Amount: {amount} lbs</Text>
+        <Text>Amount: ${amount}</Text>
       </View>
 
       {/* Button to submit food entry */}
@@ -197,6 +212,19 @@ const AddFoodScreen = () => {
           <Text style={styles.submitButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Button to reset scores; delete before release */}
+      <View style={styles.submitContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            resetHandler();
+          }}
+          style={styles.submitButton}
+        >
+          <Text style={styles.submitButtonText}>Reset</Text>
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 };

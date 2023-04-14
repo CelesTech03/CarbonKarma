@@ -4,10 +4,25 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import styles from "./styles/HomepageStyles";
+import { getStoredScore, getStoredVal } from "../score";
+import { useIsFocused } from "@react-navigation/native";
 
 const Homepage = () => {
+  const isFocused = useIsFocused();
+
   const [user, setUser] = useState(null);
   const db = firebase.firestore();
+  
+  // saves the current score
+  const [score, setScore] = useState(null);
+
+  // gets the current daily values subtracted from score
+  const [values, setValues] = useState({
+    electricity: 0,
+    food: 0,
+    transportation: 0
+  });
+
 
   // Fetches user data from the users collection in database using their uid (unique id)
   useEffect(() => {
@@ -25,6 +40,21 @@ const Homepage = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  async function getScore() {
+    setScore(await getStoredScore());
+  };
+
+  async function getValues() {
+    setValues(await getStoredVal());
+  };
+
+  useEffect(() => {
+    if(isFocused){
+        getScore();
+        getValues();
+    }
+  }, [isFocused]);
 
   // Displays loading screen while data is being fetched
   if (!user) {
@@ -49,20 +79,20 @@ const Homepage = () => {
       <View style={styles.scoresContainer}>
         <View style={styles.score}>
           <Text style={styles.dailyScoreLabel}>Daily Score</Text>
-          <Text style={styles.dailyScoreValue}>342</Text>
+          <Text style={styles.dailyScoreValue}>{score}</Text>
         </View>
         <View style={styles.rowContainer}>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Food</Text>
-            <Text style={styles.scoreValue}>99</Text>
+            <Text style={styles.scoreValue}>{values['food']}</Text>
           </View>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Transportation</Text>
-            <Text style={styles.scoreValue}>129</Text>
+            <Text style={styles.scoreValue}>{values['transportation']}</Text>
           </View>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Energy</Text>
-            <Text style={styles.scoreValue}>114</Text>
+            <Text style={styles.scoreValue}>{values['electricity']}</Text>
           </View>
         </View>
       </View>
