@@ -2,7 +2,7 @@
   "name": "carbonkarma",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web"
@@ -15,8 +15,10 @@
     "@react-navigation/native": "^6.1.4",
     "@react-navigation/native-stack": "^6.9.10",
     "expo": "~47.0.12",
+    "expo-build-properties": "~0.4.1",
     "expo-font": "~11.0.1",
     "expo-secure-store": "~12.0.0",
+    "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.18.0",
     "formik": "^2.2.9",
@@ -27,9 +29,7 @@
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
     "react-native-web": "~0.18.9",
-    "yup": "^1.0.2",
-    "expo-build-properties": "~0.4.1",
-    "expo-splash-screen": "~0.17.5"
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

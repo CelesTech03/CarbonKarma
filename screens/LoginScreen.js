@@ -12,6 +12,7 @@ import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { addScore } from "../score";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -51,6 +52,7 @@ const LoginScreen = () => {
         console.log("Logged in with:", user.email);
       })
       .catch((error) => alert(error.message));
+      addScore();
   }
 
   return (
