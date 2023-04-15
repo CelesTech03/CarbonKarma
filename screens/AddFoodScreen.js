@@ -4,7 +4,6 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { addFoodOrder } from "../config/firebase";
 import { foodVal, getStoredScore, getStoredVal } from "../score";
-import { resetScore } from "../score"; // for resetting scores, delete before release
 
 const AddFoodScreen = () => {
   { /* For opening and closing food dropdown menus and saving value of chosen food */ }
@@ -65,7 +64,7 @@ const AddFoodScreen = () => {
   const [minAmount, setMinAmount] = useState(1);
 
   { /* For updating food amounts on slider */ }
-  const [maxAmount, setMaxAmount] = useState(30);
+  const [maxAmount, setMaxAmount] = useState(100);
 
   async function submitHandler() {
     if (
@@ -80,20 +79,12 @@ const AddFoodScreen = () => {
       console.log("AddFoodScreen.js: Category:", category);
       console.log("AddFoodScreen.js: Food:", valueFood);
       console.log("AddFoodScreen.js: Location:", valueLoc);
-      amount[0] != undefined
-      ? console.log("AddFoodScreen.js: Amount:", amount[0])
-      : console.log("AddFoodScreen.js: Amount:", amount);
+      console.log("AddFoodScreen.js: Amount:", amount);
       console.log("AddFoodScreen.js: Score change:", score_change);
       console.log("AddFoodScreen.js: Current score", await getStoredScore());
       console.log("AddFoodScreen.js: Val Summary", await getStoredVal());
 
     } else console.log("AddFoodScreen.js: Values not set");
-  }
-
-  // function to reset scores; delete before release
-  async function resetHandler() {
-    resetScore();
-    console.log('AddFoodScreen.js: scores reset, remember to delete button and function before release')
   }
 
   return (
@@ -193,10 +184,10 @@ const AddFoodScreen = () => {
       <View style={styles.sliderContainer}>
         <Slider
           value={amount}
-          onValueChange={(amount) => setAmount(Math.round(amount*100)/100)}
+          onValueChange={amount => setAmount(amount)}
           minimumValue={minAmount}
           maximumValue={maxAmount}
-          step={0.01}
+          step={1}
         />
         <Text>Amount: ${amount}</Text>
       </View>
@@ -212,19 +203,6 @@ const AddFoodScreen = () => {
           <Text style={styles.submitButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Button to reset scores; delete before release */}
-      <View style={styles.submitContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            resetHandler();
-          }}
-          style={styles.submitButton}
-        >
-          <Text style={styles.submitButtonText}>Reset</Text>
-        </TouchableOpacity>
-      </View>
-
     </View>
   );
 };
