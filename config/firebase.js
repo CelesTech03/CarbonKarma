@@ -115,7 +115,7 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
   try {
     // Create a new energy entry subcollection and add the data
     const newEnergyEntryRef = await addDoc(collection(currentUserDocRef, "energyEntries"), {
-      amount: amount[0],
+      amount: amount,
       energy: valueEnergy,
     });
     console.log("Firebase.js: New energy entry added with ID:", newEnergyEntryRef.id);

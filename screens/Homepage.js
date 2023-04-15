@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Text, View, Image } from "react-native";
+import { KeyboardAvoidingView, Text, View, Image, TouchableOpacity } from "react-native";
 import { React, useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -6,6 +6,7 @@ import "firebase/compat/firestore";
 import styles from "./styles/HomepageStyles";
 import { getStoredScore, getStoredVal } from "../score";
 import { useIsFocused } from "@react-navigation/native";
+import { resetScore } from "../score"; // for resetting scores, delete before release
 
 const Homepage = () => {
   const isFocused = useIsFocused();
@@ -67,6 +68,12 @@ const Homepage = () => {
     );
   }
 
+  // function to reset scores; delete before release
+  async function resetHandler() {
+    resetScore();
+    console.log('Homepage.js: scores reset, remember to delete button and function before release')
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.header}>
@@ -96,6 +103,18 @@ const Homepage = () => {
           </View>
         </View>
       </View>
+
+      {/* Button to reset scores; delete before release */}
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            resetHandler();
+          }}
+        >
+        <Text>Reset</Text>
+        </TouchableOpacity>
+      </View>
+
     </KeyboardAvoidingView>
   );
 };
