@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import { React, useContext } from "react";
 import styles from "./styles/AuthStyle";
 import { auth, createUserDocument } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +15,9 @@ import { addScore } from "../score";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+
+import { AuthContext } from "../AuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth/react-native";
 
 // Formik validation schema: https://formik.org/docs/guides/validation
 const SignupSchema = Yup.object().shape({
@@ -44,13 +47,16 @@ const SignupSchema = Yup.object().shape({
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
+  const { register } = useContext(AuthContext);
+
   // Firebase Signup
   function handleSignUp({ email, password, userName, fullName }) {
-    auth
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Registered with:", user.email);
+        
+        console.log("Resgistered with:", user.email);
+        
         // Stores email, username, and fullname in Database
         return createUserDocument(user, { email, userName, fullName }).then(
           () => {
@@ -74,7 +80,7 @@ const RegisterScreen = () => {
         .get();
   
       if (snapshot.exists) {
-        navigation.navigate("FirstCity");
+        register();
       }
     }
   }
@@ -182,7 +188,7 @@ const RegisterScreen = () => {
                 onPress={handleSubmit}
                 /* Checks if form inputs are valid. If valid, user can click on create account. 
                 If not button functionality is disabled and different background color */
-                disabled={!isValid}
+                //disabled={!isValid}
                 style={[
                   styles.button,
                   { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },

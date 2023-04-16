@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import React from "react";
 import styles from "./styles/AuthStyle";
 import { auth } from "../config/firebase";
@@ -13,6 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { addScore } from "../score";
+
+import { signInWithEmailAndPassword } from "firebase/auth/react-native";
+
+import { AuthContext } from "../AuthContext";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -28,15 +32,16 @@ const LoginSchema = Yup.object().shape({
 
 const LoginScreen = () => {
   const navigation = useNavigation();
+  
+  const { logIn } = useContext(AuthContext);
 
   // Firebase Login
   function handleLogin({ email, password }) {
-    auth
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         if (user) {
-          navigation.navigate("Homepage");
+          logIn();
         }
         console.log("Logged in with:", user.email);
       })
