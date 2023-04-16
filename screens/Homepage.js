@@ -1,4 +1,10 @@
-import { KeyboardAvoidingView, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { React, useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -13,7 +19,7 @@ const Homepage = () => {
 
   const [user, setUser] = useState(null);
   const db = firebase.firestore();
-  
+
   // saves the current score
   const [score, setScore] = useState(null);
 
@@ -69,8 +75,12 @@ const Homepage = () => {
 
   // function to reset scores; delete before release
   async function resetHandler() {
-    resetScore();
-    console.log('Homepage.js: scores reset, remember to delete button and function before release')
+    await resetScore();
+    setScore(150);
+    setValues({ electricity: 0, food: 0, transportation: 0 });
+    console.log(
+      "Homepage.js: scores reset, remember to delete button and function before release"
+    );
   }
 
   return (
@@ -110,10 +120,9 @@ const Homepage = () => {
             resetHandler();
           }}
         >
-        <Text>Reset</Text>
+          <Text>Reset</Text>
         </TouchableOpacity>
       </View>
-
     </KeyboardAvoidingView>
   );
 };
