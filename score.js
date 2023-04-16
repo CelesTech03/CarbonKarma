@@ -95,8 +95,8 @@ async function updateScore(adjust) {
     try {
         let prev_score = Number(await SecureStore.getItemAsync("score"));
         if(Number.isNaN(prev_score)) {
-            await SecureStore.setItemAsync("score", String(0));
-            prev_score = 0;
+            await SecureStore.setItemAsync("score", String(150));
+            prev_score = 150;
         }
         const new_score = Number(prev_score) + adjust;
         if(new_score != undefined) {
@@ -227,20 +227,41 @@ export const electricity_location = Object.keys(electricity_factor);
 //Return the calculated value of the electricity entry if score updates successfully.
 export async function electricityVal(location, usage) {
     try {
+        const offset = 2520;
         let converted_usage = usage / 1000;
         if(electricity_factor.hasOwnProperty(location)) {
             let emission_factor = electricity_factor[location];
-            let val = Math.round(emission_factor * converted_usage  * 0.453*-10);
+            let val = Math.round(emission_factor * converted_usage  * 0.453 * -10);
 
-            //const new_score = await updateScore(252 + val);
-            const new_score = await updateScore(val);
+            const new_score = await updateScore(offset + val);
             
             if(new_score != undefined) {
                 await saveVal(val, "electricity");
+                await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
                 return val;
             }
         }
     } catch (error) {
+        console.log(error);
+    }
+}
+
+//Check if the user request for making a new energy entry is made
+//at least 30 days after the last request.
+//Return 0 if is true and otherwise return the time, in millisecond, 
+//that the user still need to wait before able to create a new
+//entry.
+export async function allowElectricityEntry() {
+    try {
+        const last_allow = Number(await SecureStore.getItemAsync("lastAllowTime"));
+        if(last_allow == undefined) {
+            await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
+            return 0;
+        }
+
+        const cycle = 24 * 60 * 60 * 1000 * 30;
+        return Math.max(0, cycle - (Date.now() - last_allow));
+    } catch(error) {
         console.log(error);
     }
 }
