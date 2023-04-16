@@ -5,12 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import { React, useContext } from "react";
 import styles from "./styles/AuthStyle";
 import { auth, createUserDocument } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
+import { AuthContext } from "../AuthContext";
 
 // Formik validation schema: https://formik.org/docs/guides/validation
 const SignupSchema = Yup.object().shape({
@@ -40,6 +42,8 @@ const SignupSchema = Yup.object().shape({
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
+  const { register } = useContext(AuthContext);
+
   // Firebase Signup
   function handleSignUp({ email, password, userName, fullName }) {
     auth
@@ -47,7 +51,7 @@ const RegisterScreen = () => {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        navigation.navigate("FirstCity");
+        register();
         console.log("Resgistered with:", user.email);
         // Stores email, username, and fullname in Database
         return createUserDocument(user, { email, userName, fullName });
@@ -158,10 +162,10 @@ const RegisterScreen = () => {
             {/* Buttons View */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                onPress={handleSubmit}
+                onPress={() => register()}
                 /* Checks if form inputs are valid. If valid, user can click on create account. 
                 If not button functionality is disabled and different background color */
-                disabled={!isValid}
+                //disabled={!isValid}
                 style={[
                   styles.button,
                   { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },

@@ -17,7 +17,11 @@ import FirstCity from "./screens/FirstCity";
 import FirstGas from "./screens/FirstGas";
 import FirstSolar from "./screens/FirstSolar";
 import FirstCar from "./screens/FirstCar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { AuthContext } from "./AuthContext";
+
+import { auth } from "./config/firebase";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,28 +32,80 @@ export default function App() {
   const [screen, setScreen] = useState("");
   //{(navigationRef.current != null && navigationRef.current.getCurrentRoute().name != "Register") && <BottomNav/>}
   //{console.log(navigationRef.current != null && navigationRef.current.getCurrentRoute().name)}
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    const unsubcribe = auth.onAuthStateChanged((user) => {
+      setIsLoaded(true);
+      if (user) {
+        setIsLogin(true);
+        console.log("login");
+      }
+    });
+    // When user leaves, unsubcribe from this listener
+    return unsubcribe;
+  }, []);
+
+  if(!isLoaded) {
+    return <View ></View>;
+  }
+
+ const authContext = {
+  logIn: () => {
+    setIsLogin(true);
+    setIsRegistered(false);
+    console.log('login')
+  },
+  logOut: () => {
+    setIsLogin(false);
+    setIsRegistered(false);
+    console.log('logout');
+  },
+  register: () => {
+    setIsLogin(false);
+    setIsRegistered(true);
+    console.log('register');
+  }
+}
+
   return (
     <NavigationContainer
       onStateChange={(state) => setScreen(state.routes[state.index].name)}
     >
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="FirstCity" component={FirstCity} />
-        <Stack.Screen name="FirstCar" component={FirstCar} />
-        <Stack.Screen name="FirstGas" component={FirstGas} />
-        <Stack.Screen name="FirstSolar" component={FirstSolar} />
-        <Stack.Screen name="Homepage" component={Homepage} />
-        <Stack.Screen name="AddFood" component={AddFoodScreen} />
-        <Stack.Screen
-          name="AddTransportation"
-          component={AddTransportationScreen}
-        />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="History" component={HistoryScreen} />
-        <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
-        <Stack.Screen name="AddEnergy" component={AddEnergyScreen} />
-      </Stack.Navigator>
+      <AuthContext.Provider value={authContext}>
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}>
+          {(!isLogin) ? (
+            (!isRegistered) ? (
+            <>
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </>
+            ) : (
+            <>
+              <Stack.Screen name="FirstCity" component={FirstCity} />
+              <Stack.Screen name="FirstCar" component={FirstCar} />
+              <Stack.Screen name="FirstGas" component={FirstGas} />
+              <Stack.Screen name="FirstSolar" component={FirstSolar} />
+            </>
+            )) : (
+            <>
+              <Stack.Screen name="Homepage" component={Homepage} />
+              <Stack.Screen name="AddFood" component={AddFoodScreen} />
+              <Stack.Screen
+                name="AddTransportation"
+                component={AddTransportationScreen}
+              />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="History" component={HistoryScreen} />
+              <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+              <Stack.Screen name="AddEnergy" component={AddEnergyScreen} />
+            </>
+          )}
+        </Stack.Navigator>
+      </AuthContext.Provider>    
       {console.log("App.js: This is the", screen, "screen")}
       {screen != "" &&
         screen != "Register" &&
