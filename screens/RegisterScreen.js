@@ -17,6 +17,7 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 
 import { AuthContext } from "../AuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth/react-native";
 
 // Formik validation schema: https://formik.org/docs/guides/validation
 const SignupSchema = Yup.object().shape({
@@ -50,12 +51,10 @@ const RegisterScreen = () => {
 
   // Firebase Signup
   function handleSignUp({ email, password, userName, fullName }) {
-    auth
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         
-        register();
         console.log("Resgistered with:", user.email);
         
         // Stores email, username, and fullname in Database
@@ -81,7 +80,7 @@ const RegisterScreen = () => {
         .get();
   
       if (snapshot.exists) {
-        navigation.navigate("FirstCity");
+        register();
       }
     }
   }
@@ -186,7 +185,7 @@ const RegisterScreen = () => {
             {/* Buttons View */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                onPress={() => register()}
+                onPress={handleSubmit}
                 /* Checks if form inputs are valid. If valid, user can click on create account. 
                 If not button functionality is disabled and different background color */
                 //disabled={!isValid}

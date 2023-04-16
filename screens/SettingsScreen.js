@@ -6,6 +6,7 @@ import { auth } from "../config/firebase"
 import { signOut } from "firebase/auth/react-native";
 
 import { AuthContext } from "../AuthContext";
+import { resetScore } from "../score";
 
 const SettingsScreen = ({ navigation }) =>  {
 
@@ -14,6 +15,7 @@ const SettingsScreen = ({ navigation }) =>  {
   const handleLogOut = () => {
     signOut(auth)
       .then(() => {
+        resetScore();
         logOut();
         console.log("Sign out successfully");
       })
