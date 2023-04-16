@@ -1,10 +1,18 @@
 // Import the functions you need from the SDKs you need
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import {API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID} from "@env"
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASUREMENT_ID,
+} from "@env";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -47,8 +55,8 @@ export const createUserDocument = async (user, additionalData) => {
 
   // If there is no document (snapshot) of user then create one
   if (!snapshot.exists) {
-    const {email} = user;
-    const {userName, fullName} = additionalData;
+    const { email } = user;
+    const { userName, fullName } = additionalData;
 
     try {
       userRef.set({
@@ -57,11 +65,11 @@ export const createUserDocument = async (user, additionalData) => {
         userName,
         createdAt: new Date(),
       });
-    } catch(error) {
-      console.log('Error in creating user', error);
+    } catch (error) {
+      console.log("Error in creating user", error);
     }
   }
-}
+};
 
 // Modifies existing user document (data)
 // export const modifyUserDocument = async (additionalData) => {
@@ -88,7 +96,6 @@ export const createUserDocument = async (user, additionalData) => {
 //   }
 // }
 
-
 export const addFoodOrder = async (amount, valueFood, valueLoc) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
@@ -96,12 +103,18 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
 
   try {
     // Create a new food order subcollection and add the data
-    const newFoodOrderRef = await addDoc(collection(currentUserDocRef, "foodOrders"), {
-      amount: amount,
-      food: valueFood,
-      location: valueLoc,
-    });
-    console.log("Firebase.js: New food order added with ID:", newFoodOrderRef.id);
+    const newFoodOrderRef = await addDoc(
+      collection(currentUserDocRef, "foodOrders"),
+      {
+        amount: amount[0],
+        food: valueFood,
+        location: valueLoc,
+      }
+    );
+    console.log(
+      "Firebase.js: New food order added with ID:",
+      newFoodOrderRef.id
+    );
   } catch (error) {
     console.error("Firebase.js: Error adding food order:", error);
   }
@@ -114,11 +127,17 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
 
   try {
     // Create a new energy entry subcollection and add the data
-    const newEnergyEntryRef = await addDoc(collection(currentUserDocRef, "energyEntries"), {
-      amount: amount,
-      energy: valueEnergy,
-    });
-    console.log("Firebase.js: New energy entry added with ID:", newEnergyEntryRef.id);
+    const newEnergyEntryRef = await addDoc(
+      collection(currentUserDocRef, "energyEntries"),
+      {
+        amount: amount[0],
+        energy: valueEnergy,
+      }
+    );
+    console.log(
+      "Firebase.js: New energy entry added with ID:",
+      newEnergyEntryRef.id
+    );
   } catch (error) {
     console.error("Firebase.js: Error adding energy entry:", error);
   }
@@ -126,77 +145,80 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
 
 export const addTransport = async (method, mileage) => {
   // Gets the current user
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Adds the User mileage to the subcollection
   try {
-    const newTransportRef = await addDoc(collection(currentUserDocRef, "UserTransports"), {
-      method: method,
-      distance: mileage[0]
-    })
-    console.log("Added User Transport for ID: ", newTransportRef.id)
+    const newTransportRef = await addDoc(
+      collection(currentUserDocRef, "UserTransports"),
+      {
+        method: method,
+        milage: mileage[0],
+      }
+    );
+    console.log("Added User Transport for ID: ", newTransportRef.id);
   } catch (error) {
-    console.log("Failed to add User Transport: ", error)
+    console.log("Failed to add User Transport: ", error);
   }
-}
+};
 
 export const UpdateCity = async (city) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      address: city
-    })
+      address: city,
+    });
   } catch (error) {
-    console.log("Failed to add city.")
+    console.log("Failed to add city.");
   }
-}
+};
 
 export const UpdateCar = async (car) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      vehicle: car
-    })
+      vehicle: car,
+    });
   } catch (error) {
-    console.log("Failed to add car.")
+    console.log("Failed to add car.");
   }
-}
+};
 
 export const UpdateGas = async (gas) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      gas: gas
-    })
+      gas: gas,
+    });
   } catch (error) {
-    console.log("Failed to add gas.")
+    console.log("Failed to add gas.");
   }
-}
+};
 
 export const UpdateSolar = async (solar) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      solar: solar
-    })
+      solar: solar,
+    });
   } catch (error) {
-    console.log("Failed to add solar.")
+    console.log("Failed to add solar.");
   }
-}
+};
