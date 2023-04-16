@@ -32,7 +32,7 @@ const LoginSchema = Yup.object().shape({
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-
+  
   const { logIn } = useContext(AuthContext);
 
   // Firebase Login
