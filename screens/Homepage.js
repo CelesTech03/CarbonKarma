@@ -21,9 +21,8 @@ const Homepage = () => {
   const [values, setValues] = useState({
     electricity: 0,
     food: 0,
-    transportation: 0
+    transportation: 0,
   });
-
 
   // Fetches user data from the users collection in database using their uid (unique id)
   useEffect(() => {
@@ -44,16 +43,16 @@ const Homepage = () => {
 
   async function getScore() {
     setScore(await getStoredScore());
-  };
+  }
 
   async function getValues() {
     setValues(await getStoredVal());
-  };
+  }
 
   useEffect(() => {
-    if(isFocused){
-        getScore();
-        getValues();
+    if (isFocused) {
+      getScore();
+      getValues();
     }
   }, [isFocused]);
 
@@ -91,15 +90,15 @@ const Homepage = () => {
         <View style={styles.rowContainer}>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Food</Text>
-            <Text style={styles.scoreValue}>{values['food']}</Text>
+            <Text style={styles.scoreValue}>{values.food}</Text>
           </View>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Transportation</Text>
-            <Text style={styles.scoreValue}>{values['transportation']}</Text>
+            <Text style={styles.scoreValue}>{values.transportation}</Text>
           </View>
           <View style={[styles.score, { flex: 1 }]}>
             <Text style={styles.scoreLabel}>Energy</Text>
-            <Text style={styles.scoreValue}>{values['electricity']}</Text>
+            <Text style={styles.scoreValue}>{values.electricity}</Text>
           </View>
         </View>
       </View>

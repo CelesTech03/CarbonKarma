@@ -29,17 +29,6 @@ const LoginSchema = Yup.object().shape({
 const LoginScreen = () => {
   const navigation = useNavigation();
 
-  // If user exists(has firebase account) and logs in, navigate to homepage
-  useEffect(() => {
-    const unsubcribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Homepage");
-      }
-    });
-    // When user leaves, unsubcribe from this listener
-    return unsubcribe;
-  }, []);
-
   // Firebase Login
   function handleLogin({ email, password }) {
     auth
@@ -52,7 +41,7 @@ const LoginScreen = () => {
         console.log("Logged in with:", user.email);
       })
       .catch((error) => alert(error.message));
-      addScore();
+    addScore();
   }
 
   return (
