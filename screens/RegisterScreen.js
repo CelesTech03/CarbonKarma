@@ -11,6 +11,10 @@ import { auth, createUserDocument } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { addScore } from "../score";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 
 // Formik validation schema: https://formik.org/docs/guides/validation
 const SignupSchema = Yup.object().shape({
@@ -43,19 +47,36 @@ const RegisterScreen = () => {
   // Firebase Signup
   function handleSignUp({ email, password, userName, fullName }) {
     auth
-      // Creates new user
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        navigation.navigate("FirstCity");
-        console.log("Resgistered with:", user.email);
+        console.log("Registered with:", user.email);
         // Stores email, username, and fullname in Database
-        return createUserDocument(user, { email, userName, fullName });
-      })
-      .then(() => {
-        console.log("User document created successfully");
+        return createUserDocument(user, { email, userName, fullName }).then(
+          () => {
+            console.log("User document created successfully");
+            addScore();
+            navigateToHomepage();
+          }
+        );
       })
       .catch((error) => alert(error.message));
+  }
+
+  // Ensures user data is loaded before navigating to homepage
+  async function navigateToHomepage() {
+    const user = await firebase.auth().currentUser;
+  
+    if (user) {
+      const snapshot = await firebase.firestore()
+        .collection("users")
+        .doc(user.uid)
+        .get();
+  
+      if (snapshot.exists) {
+        navigation.navigate("FirstCity");
+      }
+    }
   }
 
   return (
