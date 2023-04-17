@@ -81,6 +81,7 @@ const AddFoodScreen = () => {
       console.log("AddFoodScreen.js: Location:", valueLoc);
       console.log("AddFoodScreen.js: Amount:", amount);
       console.log("AddFoodScreen.js: Score change:", score_change);
+      alert("Food score change: " + score_change);
       console.log("AddFoodScreen.js: Current score", await getStoredScore());
       console.log("AddFoodScreen.js: Val Summary", await getStoredVal());
 
