@@ -47,6 +47,7 @@ const AddTransportationScreen = () => {
         ? console.log("Mileage: ", mileage[0])
         : console.log("Mileage: ", mileage);
       console.log("AddTransScreen.js: Score change:", score_change);
+      alert("Transportation score change: " + score_change);
       console.log("AddTransScreen.js: Current score", await getStoredScore());
       console.log("AddTransScreen.js: Val Summary", await getStoredVal());
     } else console.log("Method is not set.");

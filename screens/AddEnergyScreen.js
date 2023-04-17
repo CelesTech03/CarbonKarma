@@ -34,6 +34,7 @@ const AddEnergyScreen = () => {
       console.log("AddEnergyScreen.js: Energy:", valueEnergy);
       console.log("AddEnergyScreen.js: Amount:", amount);
       console.log("AddEnergyScreen.js: Score change:", score_change);
+      alert("Energy score change: " + score_change);
       console.log("AddEnergyScreen.js: Current score", await getStoredScore());
       console.log("AddEnergyScreen.js: Val Summary", await getStoredVal());
     }
