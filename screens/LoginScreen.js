@@ -32,7 +32,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const unsubcribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate("Homepage");
+        navigation.navigate("Settings");
       }
     });
     // When user leaves, unsubcribe from this listener
@@ -46,7 +46,7 @@ const LoginScreen = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         if (user) {
-          navigation.navigate("Homepage");
+          navigation.navigate("Settings");
         }
         console.log("Logged in with:", user.email);
       })

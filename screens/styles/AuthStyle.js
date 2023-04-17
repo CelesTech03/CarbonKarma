@@ -63,4 +63,25 @@ export default StyleSheet.create({
     fontSize: 12,
     color: "#FF0D10",
   },
+  image: {
+    height: 100,
+    width: 100,
+    marginLeft: 140
+  },
+  settingHeading: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginLeft: 20
+  },
+  settingContainer: {
+    textAlign: "left",
+    flex: 1,
+    justifyContent: 'center'
+  },
+  settingTitle: {
+    fontWeight: "800",
+    fontSize: 35,
+    marginBottom: 40,
+    textAlign: 'center'
+  }
 });
