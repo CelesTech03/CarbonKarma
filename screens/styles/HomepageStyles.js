@@ -37,9 +37,13 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 2.5,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginHorizontal: 20,
+    marginVertical: 10,
     height: 175,
+    backgroundColor: "#fff",
   },
   score: {
     flex: 1,
@@ -49,10 +53,12 @@ export default StyleSheet.create({
   dailyScoreLabel: {
     fontSize: 20,
     fontWeight: "bold",
+    marginRight: 5,
   },
   dailyScoreValue: {
     fontSize: 26,
     fontWeight: "bold",
+    marginRight: 5,
   },
   scoreLabel: {
     fontSize: 14,
