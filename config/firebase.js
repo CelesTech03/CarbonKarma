@@ -119,7 +119,7 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
     const newFoodOrderRef = await addDoc(
       collection(currentUserDocRef, "foodOrders"),
       {
-        amount: amount[0],
+        amount: amount,
         food: valueFood,
         location: valueLoc,
       }
@@ -143,7 +143,7 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
     const newEnergyEntryRef = await addDoc(
       collection(currentUserDocRef, "energyEntries"),
       {
-        amount: amount[0],
+        amount: amount,
         energy: valueEnergy,
       }
     );

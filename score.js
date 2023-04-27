@@ -114,6 +114,7 @@ export async function resetScore() {
         await SecureStore.setItemAsync("score", String(150));
         await resetVals();
         console.log('score.js: resetScore has been called, remember to delete function before release');
+        await SecureStore.deleteItemAsync('lastAllowTime');
     } catch (error) {
         console.log(error);
     }
