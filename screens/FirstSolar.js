@@ -1,14 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { React, useState, useContext } from "react";
+import { React, useState } from "react";
 import { UpdateSolar } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 
-import { AuthContext } from "../AuthContext";
-
 const FirstSolar = () => {
   const [solar, setSolar] = useState(null);
-
-  const { logIn } = useContext(AuthContext);
 
   async function submitSolarHandler() {
     if (solar != null) {
@@ -62,7 +58,7 @@ const FirstSolar = () => {
       <TouchableOpacity
         style={styles.Nextbutton}
         activeOpacity={0.5}
-        onPress={() => logIn()}
+        onPress={() => navigation.navigate("UploadImage")}
       >
         <Image
           source={require("../assets/right-arrow.png")}
