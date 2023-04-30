@@ -9,6 +9,7 @@ import { React, useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import "firebase/compat/storage";
 import styles from "./styles/HomepageStyles";
 import { getStoredScore, getStoredVal } from "../score";
 import { useIsFocused } from "@react-navigation/native";
@@ -16,10 +17,14 @@ import { resetScore } from "../score"; // for resetting scores, delete before re
 
 const Homepage = () => {
   const isFocused = useIsFocused();
-
+  /* 
+  Fetch Avatar Reference:
+  Firebase Download Files Documentation: https://firebase.google.com/docs/storage/web/download-files
+  */
+  const [userAvatarURL, setUserAvatarURL] = useState(null);
   const [user, setUser] = useState(null);
   const db = firebase.firestore();
-
+  const storage = firebase.storage();
   // saves the current score
   const [score, setScore] = useState(null);
 
@@ -41,6 +46,16 @@ const Homepage = () => {
             if (snapshot.exists) {
               setUser(snapshot.data());
             }
+          });
+        // Retrieve user avatar
+        const avatarRef = storage.ref().child(`avatars/${user.uid}`);
+        avatarRef
+          .getDownloadURL()
+          .then((url) => {
+            setUserAvatarURL(url);
+          })
+          .catch((error) => {
+            console.log("Error getting user avatar from storage: ", error);
           });
       }
     });
@@ -88,7 +103,11 @@ const Homepage = () => {
       <View style={styles.header}>
         <Text style={styles.username}>{user.userName}</Text>
         <Image
-          source={require("../assets/who_pokemon.jpg")}
+          source={
+            userAvatarURL
+              ? { uri: userAvatarURL }
+              : require("../assets/who_pokemon.jpg")
+          }
           style={styles.avatar}
         />
       </View>
