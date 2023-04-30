@@ -17,6 +17,7 @@ import FirstCity from "./screens/FirstCity";
 import FirstGas from "./screens/FirstGas";
 import FirstSolar from "./screens/FirstSolar";
 import FirstCar from "./screens/FirstCar";
+import UploadImage from "./screens/UploadImage";
 import { useState, useEffect } from "react";
 
 import { AuthContext } from "./AuthContext";
@@ -89,6 +90,7 @@ export default function App() {
               <Stack.Screen name="FirstCar" component={FirstCar} />
               <Stack.Screen name="FirstGas" component={FirstGas} />
               <Stack.Screen name="FirstSolar" component={FirstSolar} />
+              <Stack.Screen name="UploadImage" component={UploadImage} />
             </>
             )) : (
             <>
@@ -113,7 +115,8 @@ export default function App() {
         screen != "FirstCity" &&
         screen != "FirstGas" &&
         screen != "FirstCar" &&
-        screen != "FirstSolar" && <BottomNav />}
+        screen != "FirstSolar" && 
+        screen != "UploadImage" && <BottomNav />}
     </NavigationContainer>
   );
 }
