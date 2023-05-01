@@ -122,18 +122,18 @@ export async function resetScore() {
 
 //Emission factors for calculating food value.
 const meat_factor = {
-    "poultry": [0.468, 0.525],
-    "seafood": [0.261, 0.302],
-    "other meat": [0.396, 0.449]
+    "Poultry": [0.468, 0.525],
+    "Seafood": [0.261, 0.302],
+    "Other meat": [0.396, 0.449]
 };
 const plant_factor = {
-    "grains": [1.461, 1.609],
-    "vegetable": [0.203, 0.292],
-    "fruit": [0.194, 0.271]
+    "Grains": [1.461, 1.609],
+    "Vegetables": [0.203, 0.292],
+    "Fruits": [0.194, 0.271]
 };
 const dairy_factor = {
-    "cheese": [0.405, 0.455],
-    "milk": [0.337, 0.393]
+    "Cheese": [0.405, 0.455],
+    "Milk": [0.337, 0.393]
 };
 const food_factor = {
     "meat": meat_factor,
@@ -163,7 +163,7 @@ export async function foodVal(category, type, location, price) {
     
         if(food_factor.hasOwnProperty(category)) {
             if(food_factor[category].hasOwnProperty(type)) {
-                let emission_factor = food_factor[category][type][(location == 'farmer' ? 0 : 1)];
+                let emission_factor = food_factor[category][type][(location == 'Farmer\'s market' ? 0 : 1)];
                 let converted_price = price * convert_rate;
                 let val = Math.round(emission_factor * converted_price*-10);
 
@@ -182,9 +182,9 @@ export async function foodVal(category, type, location, price) {
 
 //Emission factor for calculating transportation value.
 const trans_factor = {
-    "car": 0.332,
-    "bus": 0.056,
-    "train": 0.099
+    "Car": 0.332,
+    "Bus": 0.056,
+    "Train": 0.099
 };
 
 //Types of vehicles which the score can be calculated

@@ -13,8 +13,8 @@ const AddEnergyScreen = () => {
   {/* Lists for energy dropdown menu */}
   const energy =[
     {label: 'Select an item', value: ''},
-    {label: 'Gas', value: 'gas'},
-    {label: 'Electricity', value: 'electric'},
+    {label: 'Gas', value: 'Gas'},
+    {label: 'Electricity', value: 'Electricity'},
   ];
 
   {/* For updating energy amounts on slider */}
@@ -28,8 +28,14 @@ const AddEnergyScreen = () => {
 
   async function submitHandler() {
     if (valueEnergy != "" && valueEnergy != null) {
-      addEnergyEntry(amount, valueEnergy); // add to database
       const score_change = await electricityVal('NYC', amount); // update current score
+      
+      const day = new Date().getDate()
+      const month = new Date().getMonth()
+      const year = new Date().getFullYear();
+      const date = month + '/' + day + '/' + year;
+
+      addEnergyEntry(amount, valueEnergy, date, score_change); // add to database
 
       console.log("AddEnergyScreen.js: Energy:", valueEnergy);
       console.log("AddEnergyScreen.js: Amount:", amount);

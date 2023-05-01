@@ -29,26 +29,26 @@ const AddFoodScreen = () => {
   { /* Lists for dropdown menus */ }
   const meat = [
     { label: "Select an item", value: "" },
-    { label: "Poultry", value: "poultry" },
-    { label: "Seafood", value: "seafood" },
-    { label: "Other", value: "other meat" },
+    { label: "Poultry", value: "Poultry" },
+    { label: "Seafood", value: "Seafood" },
+    { label: "Other", value: "Other meat" },
   ];
   const plant = [
     { label: "Select an item", value: "" },
-    { label: "Grains", value: "grains" },
-    { label: "Vegetable", value: "vegetable" },
-    { label: "Fruit", value: "fruit" },
+    { label: "Grains", value: "Grains" },
+    { label: "Vegetable", value: "Vegetables" },
+    { label: "Fruit", value: "Fruits" },
   ];
   const dairy = [
     { label: "Select an item", value: "" },
-    { label: "Milk", value: "milk" },
-    { label: "Cheese", value: "cheese" },
+    { label: "Milk", value: "Milk" },
+    { label: "Cheese", value: "Cheese" },
   ];
 
   const location = [
     { label: "Select a location", value: "" },
-    { label: "Farmer's market", value: "farmer" },
-    { label: "Grocery store", value: "local" },
+    { label: "Farmer's market", value: "Farmer's market" },
+    { label: "Grocery store", value: "Grocery store" },
   ];
 
   { /* For choosing which dropdown list to display; default is 'meat' for Meat list; set to 'veg' for Vegs list; set to 'dairy' for Dairy list */ }
@@ -73,8 +73,14 @@ const AddFoodScreen = () => {
       valueFood != null &&
       valueLoc != null
     ) {
-      addFoodOrder(amount, valueFood, valueLoc);
       const score_change = await foodVal(category, valueFood, valueLoc, amount);
+      
+      const day = new Date().getDate()
+      const month = new Date().getMonth()
+      const year = new Date().getFullYear();
+      const date = month + '/' + day + '/' + year;
+      
+      addFoodOrder(amount, valueFood, valueLoc, date, score_change);
 
       console.log("AddFoodScreen.js: Category:", category);
       console.log("AddFoodScreen.js: Food:", valueFood);
