@@ -6,9 +6,9 @@ import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
 import { AsyncStorage } from '@react-native-async-storage/async-storage';
-import { getReactNativePersistence } from 'firebase/auth/react-native/';
-import { initializeAuth } from 'firebase/auth/react-native/';
-import { getAuth } from 'firebase/auth/react-native/';
+import { getReactNativePersistence } from 'firebase/auth/react-native';
+import { initializeAuth } from 'firebase/auth/react-native';
+import { getAuth } from 'firebase/auth/react-native';
 
 import {
   API_KEY,
@@ -109,7 +109,7 @@ export const createUserDocument = async (user, additionalData) => {
 //   }
 // }
 
-export const addFoodOrder = async (amount, valueFood, valueLoc) => {
+export const addFoodOrder = async (amount, valueFood, valueLoc, date, score_change) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
@@ -122,6 +122,8 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
         amount: amount,
         food: valueFood,
         location: valueLoc,
+        date: date,
+        score_change: score_change,
       }
     );
     console.log(
@@ -133,7 +135,7 @@ export const addFoodOrder = async (amount, valueFood, valueLoc) => {
   }
 };
 
-export const addEnergyEntry = async (amount, valueEnergy) => {
+export const addEnergyEntry = async (amount, valueEnergy, date, score_change) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
@@ -145,6 +147,8 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
       {
         amount: amount,
         energy: valueEnergy,
+        date: date,
+        score_change: score_change
       }
     );
     console.log(
@@ -156,7 +160,7 @@ export const addEnergyEntry = async (amount, valueEnergy) => {
   }
 };
 
-export const addTransport = async (method, mileage) => {
+export const addTransport = async (method, mileage, date, score_change) => {
   // Gets the current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
@@ -167,7 +171,9 @@ export const addTransport = async (method, mileage) => {
       collection(currentUserDocRef, "UserTransports"),
       {
         method: method,
-        milage: mileage[0],
+        mileage: mileage[0],
+        date: date,
+        score_change: score_change,
       }
     );
     console.log("Added User Transport for ID: ", newTransportRef.id);

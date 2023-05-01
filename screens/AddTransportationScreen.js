@@ -19,9 +19,9 @@ const AddTransportationScreen = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [method, setMethod] = useState([
-    { label: "Car", value: "car" },
-    { label: "Bus", value: "bus" },
-    { label: "Train", value: "train" },
+    { label: "Car", value: "Car" },
+    { label: "Bus", value: "Bus" },
+    { label: "Train", value: "Train" },
     // { label: "Walk/bike", value: "walk_bike" },
   ]);
 
@@ -40,8 +40,15 @@ const AddTransportationScreen = () => {
 
   async function submitTransportHandler() {
     if (value != null) {
-      addTransport(value, mileage);
       const score_change = await transVal(value, mileage);
+      
+      const day = new Date().getDate()
+      const month = new Date().getMonth()
+      const year = new Date().getFullYear();
+      const date = month + '/' + day + '/' + year;
+
+      addTransport(value, mileage, date, score_change);
+
       console.log("Method: ", value);
       mileage[0] != undefined
         ? console.log("Mileage: ", mileage[0])
