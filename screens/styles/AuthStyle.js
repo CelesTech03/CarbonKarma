@@ -71,7 +71,8 @@ export default StyleSheet.create({
   settingHeading: {
     fontSize: 20,
     fontWeight: '700',
-    marginLeft: 20
+    marginLeft: 20,
+    marginBottom: 15
   },
   settingContainer: {
     textAlign: "left",
@@ -82,6 +83,12 @@ export default StyleSheet.create({
     fontWeight: "800",
     fontSize: 35,
     marginBottom: 40,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: "#00695C"
+  },
+  settingText: {
+    fontSize: 16,
+    marginLeft: 40,
+    marginBottom: 20
   }
 });
