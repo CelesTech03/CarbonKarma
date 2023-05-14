@@ -28,6 +28,8 @@ const AddTransportationScreen = () => {
   //values for slider
   const [mileage, setMileage] = useState(0);
 
+  const [warning, setWarning] = useState('none')
+
   const onSubmit = () => {
     setMileage(0);
     setValue(null);
@@ -51,7 +53,7 @@ const AddTransportationScreen = () => {
 
       console.log("Method: ", value);
       mileage[0] != undefined
-        ? console.log("Mileage: ", mileage[0])
+        ? console.log("Mileage: ", mileage)
         : console.log("Mileage: ", mileage);
       console.log("AddTransScreen.js: Score change:", score_change);
       alert("Transportation score change: " + score_change);
@@ -60,6 +62,15 @@ const AddTransportationScreen = () => {
     } else console.log("Method is not set.");
   }
 
+  function handleValueChange(value) {
+    if(String(value).match("^[0-9]*$")) {
+      setMileage(value);
+      setWarning('none');
+    }
+    else {
+      setWarning('flex');
+    }
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Transportation</Text>
@@ -89,15 +100,16 @@ const AddTransportationScreen = () => {
             multiline={false}
             inputMode={"numeric"}
             value={mileage.toString()}
-            onChangeText={(value) => setMileage(value)}
+            onChangeText={(value) => handleValueChange(value)}
             style={styles.sliderTextInput}
           />
           <Text>miles</Text>
         </View>
+        <Text style={{color: 'red', display: warning}}>Please only input numbers 0 - 9!</Text>
         <Slider
           value={mileage}
           step={1}
-          onValueChange={(value) => setMileage(value)}
+          onValueChange={(value) => handleValueChange(value)}
           maximumValue={500}
         />
       </KeyboardAvoidingView>
