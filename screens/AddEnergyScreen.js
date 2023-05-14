@@ -30,8 +30,8 @@ const AddEnergyScreen = () => {
     if (valueEnergy != "" && valueEnergy != null) {
       const score_change = await electricityVal('NYC', amount); // update current score
       
-      const day = new Date().getDate()
-      const month = new Date().getMonth()
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
 

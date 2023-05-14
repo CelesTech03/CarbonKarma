@@ -42,8 +42,8 @@ const AddTransportationScreen = () => {
     if (value != null) {
       const score_change = await transVal(value, mileage);
       
-      const day = new Date().getDate()
-      const month = new Date().getMonth()
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
 

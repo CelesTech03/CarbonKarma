@@ -141,21 +141,21 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {foodOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column1}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text} >{order.data.date}</Text>
               </Col>
               <Col style={styles.column1}>
-                <Text style={styles.row_text} key={order.id}>{order.data.food}</Text>
+                <Text style={styles.row_text}>{order.data.food}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.location}</Text>
+                <Text style={styles.row_text}>{order.data.location}</Text>
               </Col>
               <Col style={styles.column3}>
-                <Text style={styles.row_text} key={order.id}>${order.data.amount}</Text>
+                <Text style={styles.row_text}>${order.data.amount}</Text>
               </Col>
               <Col style={styles.column3}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}
@@ -219,18 +219,18 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {energyOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text}>{order.data.date}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.energy}</Text>
+                <Text style={styles.row_text}>{order.data.energy}</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.amount} kWh</Text>
+                <Text style={styles.row_text}>{order.data.amount} kWh</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}
@@ -294,18 +294,18 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {transportOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text}>{order.data.date}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.method}</Text>
+                <Text style={styles.row_text}>{order.data.method}</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.mileage} miles</Text>
+                <Text style={styles.row_text}>{order.data.mileage} miles</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}

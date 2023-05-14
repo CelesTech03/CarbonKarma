@@ -75,8 +75,8 @@ const AddFoodScreen = () => {
     ) {
       const score_change = await foodVal(category, valueFood, valueLoc, amount);
       
-      const day = new Date().getDate()
-      const month = new Date().getMonth()
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
       

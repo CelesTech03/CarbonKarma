@@ -24,6 +24,11 @@ import { AuthContext } from "./AuthContext";
 
 import { auth } from "./config/firebase";
 
+import { LogBox } from 'react-native';
+
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
