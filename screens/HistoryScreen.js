@@ -19,6 +19,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
   { /* For choosing which button to highlight; default is 0 for Food button; set to 1 for Energy; set to 2 for Transportation */ }
   const [buttons, setButtons] = useState(0);
+  
   // Fetches user data from the users collection in database using their uid (unique id)
   useEffect(() => {
     if (isFocused) {
@@ -26,7 +27,7 @@ const HistoryScreen = ({ navigation }) =>  {
         if (user) {
           // get the foodOrders collection
           db.collection("users")
-            .doc(user.uid).collection("foodOrders")
+            .doc(user.uid).collection("foodOrders").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];
@@ -41,7 +42,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
           // get the energyEntries collection
           db.collection("users")
-            .doc(user.uid).collection("energyEntries")
+            .doc(user.uid).collection("energyEntries").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];
@@ -55,7 +56,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
           // get the foodOrders collection
           db.collection("users")
-            .doc(user.uid).collection("UserTransports")
+            .doc(user.uid).collection("UserTransports").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];

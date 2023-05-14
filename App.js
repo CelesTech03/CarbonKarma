@@ -76,6 +76,10 @@ export default function App() {
   }
 }
 
+  {/* Sets up the different screens user can move b/t depending on whether they're logged in and/or
+registered. onStateChange was set up to keep track of which screen user is on and print to console
+for tesing purposes. BottomNav bar is set to be included in any screens that aren't login, registration,
+or onboarding screen. */}
   return (
     <NavigationContainer
       onStateChange={(state) => setScreen(state.routes[state.index].name)}
@@ -96,9 +100,10 @@ export default function App() {
               <Stack.Screen name="FirstGas" component={FirstGas} />
               <Stack.Screen name="FirstSolar" component={FirstSolar} />
               <Stack.Screen name="UploadImage" component={UploadImage} />
+              <Stack.Screen name="Homepage" component={Homepage} />
             </>
             )) : (
-            <>
+            <> 
               <Stack.Screen name="Homepage" component={Homepage} />
               <Stack.Screen name="AddFood" component={AddFoodScreen} />
               <Stack.Screen
@@ -109,11 +114,14 @@ export default function App() {
               <Stack.Screen name="History" component={HistoryScreen} />
               <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
               <Stack.Screen name="AddEnergy" component={AddEnergyScreen} />
+              <Stack.Screen name="UploadImage" component={UploadImage} />
             </>
           )}
         </Stack.Navigator>
       </AuthContext.Provider>    
       {console.log("App.js: This is the", screen, "screen")}
+
+
       {screen != "" &&
         screen != "Register" &&
         screen != "Login" &&

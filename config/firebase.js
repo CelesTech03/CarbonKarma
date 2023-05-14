@@ -171,7 +171,7 @@ export const addTransport = async (method, mileage, date, score_change) => {
     const newTransportRef = await addDoc(
       collection(currentUserDocRef, "UserTransports"), {
       method: method,
-      mileage: mileage[0],
+      mileage: mileage,
       date: date,
       score_change: score_change,
     }

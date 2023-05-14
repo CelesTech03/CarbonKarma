@@ -1,6 +1,6 @@
 apply plugin: "com.android.application"
 
-import com.android.build.OutputFile
+//import com.android.build.OutputFile
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -225,6 +225,9 @@ android {
             keyPassword 'android'
         }
     }
+    // release settings gotten from:
+    // https://www.manuelrdsg.com/2019/06/secure-your-react-native-apps-before-production/
+    // except useProguard true" line is removed because that function is no longer supported in the latest gradle version.
     buildTypes {
         debug {
             signingConfig signingConfigs.debug

@@ -31,7 +31,7 @@ const FirstGas = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>How many gallons of gas do you use?</Text>
+      <Text style={styles.heading}>How many gallons of gas do you use per week?</Text>
 
       <View style={styles.dropdownContainer}>
         <DropDownPicker
