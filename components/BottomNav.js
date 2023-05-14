@@ -2,7 +2,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { React, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import { allowElectricityEntry } from "../score";
 const BottomNav = () => {
   {/* For choosing which menu button to highlight */}
   const [buttons, setButtons] = useState(0);
@@ -13,25 +12,6 @@ const BottomNav = () => {
   {/* Navigation object used to move between different screens when menu icons are pressed */}
   const navigation = useNavigation();
 
-  async function handleEnergyPress() {
-    const diff = await allowElectricityEntry();
-    if(diff == 0) {
-      setButtons(5);
-      navigation.navigate("AddEnergy");
-      setTopMenu(!topmenu);
-    }
-    else {
-      const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-      const hours = Math.floor(diff / (60 * 60 * 1000)) % 24;
-      const minutes = Math.floor(diff  / (60 * 1000)) % 60;
-      const seconds = Math.floor(diff / 1000) % 60;
-      alert("You need to wait\n" + 
-        `${days}d ${hours}h ${minutes}m ${seconds}s\n` + 
-        "before making new energy entry" );
-    }
-    
-  }
-
   return (
     <View style={styles.navContainer} >
       <View style={[topmenu == true ? styles.topMenuSelected : styles.topMenuNotSelected]} >
@@ -41,7 +21,7 @@ const BottomNav = () => {
           style={[buttons == 4 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Image style={styles.image} source={require('../assets/carrot.png')}/>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleEnergyPress}
+        <TouchableOpacity onPress={() => {setButtons(5); navigation.navigate("AddEnergy"); setTopMenu(!topmenu)}}
           style={[buttons == 5 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Image style={styles.image} source={require('../assets/energy.png')}/>
         </TouchableOpacity>

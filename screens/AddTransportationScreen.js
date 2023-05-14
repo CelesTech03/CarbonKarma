@@ -31,6 +31,8 @@ const AddTransportationScreen = () => {
   //values for slider
   const [mileage, setMileage] = useState(0);
 
+  const [warning, setWarning] = useState('none')
+
   const onSubmit = () => {
     setMileage(0);
     setValue(null);
@@ -67,6 +69,15 @@ const AddTransportationScreen = () => {
     }
   }
 
+  function handleValueChange(value) {
+    if(String(value).match("^[0-9]*$")) {
+      setMileage(value);
+      setWarning('none');
+    }
+    else {
+      setWarning('flex');
+    }
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Transportation</Text>
@@ -90,13 +101,24 @@ const AddTransportationScreen = () => {
 
       {/* Input mileage with either slider or text input */}
       <KeyboardAvoidingView style={styles.sliderContainer}>
+        <View style={styles.sliderText}>
+          <TextInput
+            keyboardType={"numeric"}
+            multiline={false}
+            inputMode={"numeric"}
+            value={mileage.toString()}
+            onChangeText={(value) => handleValueChange(value)}
+            style={styles.sliderTextInput}
+          />
+          <Text>miles</Text>
+        </View>
+        <Text style={{color: 'red', display: warning}}>Please only input numbers 0 - 9!</Text>
         <Slider
           value={mileage}
           step={1}
-          onValueChange={(value) => setMileage(value)}
+          onValueChange={(value) => handleValueChange(value)}
           maximumValue={500}
         />
-        <Text>Distance: {mileage} miles</Text>
       </KeyboardAvoidingView>
 
 

@@ -228,18 +228,21 @@ export const electricity_location = Object.keys(electricity_factor);
 //Return the calculated value of the electricity entry if score updates successfully.
 export async function electricityVal(location, usage) {
     try {
-        const offset = 2520;
-        let converted_usage = usage / 1000;
-        if(electricity_factor.hasOwnProperty(location)) {
-            let emission_factor = electricity_factor[location];
-            let val = Math.round(emission_factor * converted_usage  * 0.453 * -10);
+        let diff = await allowElectricityEntry();
+        if(diff == 0) {
+            const offset = 2520;
+            let converted_usage = usage / 1000;
+            if(electricity_factor.hasOwnProperty(location)) {
+                let emission_factor = electricity_factor[location];
+                let val = Math.round(emission_factor * converted_usage  * 0.453 * -10);
 
-            const new_score = await updateScore(offset + val);
-            
-            if(new_score != undefined) {
-                await saveVal(val, "electricity");
-                await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
-                return val;
+                const new_score = await updateScore(offset + val);
+                
+                if(new_score != undefined) {
+                    await saveVal(val, "electricity");
+                    await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
+                    return val;
+                }
             }
         }
     } catch (error) {

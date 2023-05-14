@@ -5,7 +5,6 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { collection, doc, addDoc, updateDoc, getFirestore } from "firebase/firestore";
 import { updateEmail, updatePassword } from "firebase/auth";
-
 import { AsyncStorage } from '@react-native-async-storage/async-storage';
 import { getReactNativePersistence } from 'firebase/auth/react-native';
 import { initializeAuth } from 'firebase/auth/react-native';
