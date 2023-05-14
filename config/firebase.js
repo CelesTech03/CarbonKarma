@@ -1,4 +1,10 @@
 // Import the functions you need from the SDKs you need
+
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
+import { updateEmail, updatePassword } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
@@ -79,7 +85,7 @@ export const createUserDocument = async (user, additionalData) => {
         createdAt: new Date(),
       });
     } catch (error) {
-      console.log("Error in creating user", error);
+      console.log('Error in creating user', error);
     }
   }
 };
@@ -162,23 +168,22 @@ export const addEnergyEntry = async (amount, valueEnergy, date, score_change) =>
 
 export const addTransport = async (method, mileage, date, score_change) => {
   // Gets the current user
-  const currentUserId = auth.currentUser.uid;
-  const currentUserDocRef = doc(db, "users", currentUserId);
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
 
   // Adds the User mileage to the subcollection
   try {
     const newTransportRef = await addDoc(
-      collection(currentUserDocRef, "UserTransports"),
-      {
-        method: method,
-        mileage: mileage[0],
-        date: date,
-        score_change: score_change,
-      }
+      collection(currentUserDocRef, "UserTransports"), {
+      method: method,
+      distance: mileage[0],
+      date: date,
+      score_change: score_change,
+    }
     );
-    console.log("Added User Transport for ID: ", newTransportRef.id);
+    console.log("Added User Transport for ID: ", newTransportRef.id)
   } catch (error) {
-    console.log("Failed to add User Transport: ", error);
+    console.log("Failed to add User Transport: ", error)
   }
 };
 
@@ -199,45 +204,82 @@ export const UpdateCity = async (city) => {
 
 export const UpdateCar = async (car) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid;
-  const currentUserDocRef = doc(db, "users", currentUserId);
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      vehicle: car,
-    });
+      vehicle: car
+    })
   } catch (error) {
-    console.log("Failed to add car.");
+    console.log("Failed to add car.")
   }
-};
+}
 
 export const UpdateGas = async (gas) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid;
-  const currentUserDocRef = doc(db, "users", currentUserId);
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      gas: gas,
-    });
+      gas: gas
+    })
   } catch (error) {
-    console.log("Failed to add gas.");
+    console.log("Failed to add gas.")
   }
-};
+}
 
 export const UpdateSolar = async (solar) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid;
-  const currentUserDocRef = doc(db, "users", currentUserId);
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      solar: solar,
-    });
+      solar: solar
+    })
   } catch (error) {
-    console.log("Failed to add solar.");
+    console.log("Failed to add solar.")
   }
-};
+}
+
+export const UpdateLoc = async (new_location) => {
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
+
+    await updateDoc(currentUserDocRef, {
+      address: new_location
+    })
+    console.log("Changed address.")
+}
+
+export const UpdateEmail = async (new_email) => {
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
+
+  updateEmail(auth.currentUser, new_email).then(() => {
+    updateDoc(currentUserDocRef, {
+      email: new_email
+    })
+    console.log("Changed email on firebase.")
+  })
+
+  console.log("Changed email.")
+}
+
+export const UpdatePass = async (new_password) => {
+  const currentUserId = auth.currentUser.uid
+  reauthenticateWithCredential(currentUserId, new_password).then(() => {
+    updatePassword(auth.currentUser, new_password).then(() => {
+      console.log('Password was updated.')
+    }).catch((error) => {
+      console.log('Password was not updated.')
+    }).catch(console.log('User was not authenticated.'))
+
+  })
+
+}
