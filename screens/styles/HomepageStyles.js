@@ -29,11 +29,21 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderWidth: 1,
-    borderColor: "black",
-    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 2.5,
     borderRadius: 10,
-    height: 150,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    height: 175,
+    backgroundColor: "#fff",
   },
   score: {
     flex: 1,
@@ -43,10 +53,12 @@ export default StyleSheet.create({
   dailyScoreLabel: {
     fontSize: 20,
     fontWeight: "bold",
+    marginRight: 5,
   },
   dailyScoreValue: {
     fontSize: 26,
     fontWeight: "bold",
+    marginRight: 5,
   },
   scoreLabel: {
     fontSize: 14,

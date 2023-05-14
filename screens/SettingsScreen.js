@@ -9,6 +9,7 @@ import { UpdatePass, auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import { UpdateEmail, UpdateLoc } from "../config/firebase";
 import * as Yup from "yup";
+import { resetScore } from "../score";
 
 const ChangeSchema = Yup.object().shape({
   new_email: Yup.string().email("Invalid email").required("Required"),
@@ -85,6 +86,7 @@ const SettingsScreen = ({ navigation }) =>  {
         onPress={() => 
           signOut(auth)
           .then(() => {
+            resetScore()
             console.log('The User Signed Out.')
             navigation.navigate("Login");
           })}>

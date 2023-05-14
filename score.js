@@ -28,7 +28,7 @@ export async function getStoredScore() {
 async function saveVal(val, type) {
     try {
         let vals = {
-            electricity: -1,
+            electricity: 0,
             food: 0,
             transportation: 0
         };
@@ -50,7 +50,7 @@ async function saveVal(val, type) {
 async function resetVals() {
     try {
         const vals = {
-            electricity: -1,
+            electricity: 0,
             food: 0,
             transportation: 0
         };
@@ -67,7 +67,7 @@ export async function addScore() {
     try {
         let last_add = Number(await SecureStore.getItemAsync("lastAddTime"));
         if(last_add == undefined) {
-            const new_score = updateScore(23);
+            const new_score = updateScore(150);
             if(new_score != undefined) {
                 await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
                 await resetVals();
@@ -78,13 +78,13 @@ export async function addScore() {
         const day = 24 * 60 * 60 * 1000;
         let num_of_days = Math.floor((Date.now() - last_add) / day);
         if(num_of_days > 0) {
-            const new_score = updateScore(23);
+            const new_score = updateScore(150);
             if(new_score != undefined) {
                 await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
                 await resetVals();
                 return new_score;
             }
-        } 
+        }
     } catch (error) {
         console.log(error);
     } 
@@ -95,8 +95,8 @@ async function updateScore(adjust) {
     try {
         let prev_score = Number(await SecureStore.getItemAsync("score"));
         if(Number.isNaN(prev_score)) {
-            await SecureStore.setItemAsync("score", String(0));
-            prev_score = 0;
+            await SecureStore.setItemAsync("score", String(150));
+            prev_score = 150;
         }
         const new_score = Number(prev_score) + adjust;
         if(new_score != undefined) {
@@ -108,24 +108,36 @@ async function updateScore(adjust) {
     }
 }
 
+// Reset the score; delete before release
+export async function resetScore() {
+    try {
+        await SecureStore.setItemAsync("score", String(150));
+        await resetVals();
+        console.log('score.js: resetScore has been called, remember to delete function before release');
+        await SecureStore.deleteItemAsync('lastAllowTime');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //Emission factors for calculating food value.
 const meat_factor = {
-    "poultry": [0.468, 0.525],
-    "seafood": [0.261, 0.302],
-    "other meat": [0.396, 0.449]
+    "Poultry": [0.468, 0.525],
+    "Seafood": [0.261, 0.302],
+    "Other meat": [0.396, 0.449]
 };
 const plant_factor = {
-    "grains": [1.461, 1.609],
-    "vegetable": [0.203, 0.292],
-    "fruit": [0.194, 0.271]
+    "Grains": [1.461, 1.609],
+    "Vegetables": [0.203, 0.292],
+    "Fruits": [0.194, 0.271]
 };
 const dairy_factor = {
-    "cheese": [0.405, 0.455],
-    "milk": [0.337, 0.393]
+    "Cheese": [0.405, 0.455],
+    "Milk": [0.337, 0.393]
 };
 const food_factor = {
     "meat": meat_factor,
-    "grains/vegetable/fruit": plant_factor,
+    "plants": plant_factor,
     "dairy": dairy_factor
 };
 
@@ -151,9 +163,9 @@ export async function foodVal(category, type, location, price) {
     
         if(food_factor.hasOwnProperty(category)) {
             if(food_factor[category].hasOwnProperty(type)) {
-                let emission_factor = food_factor[category][type][(location ? 0 : 1)];
+                let emission_factor = food_factor[category][type][(location == 'Farmer\'s market' ? 0 : 1)];
                 let converted_price = price * convert_rate;
-                let val = Math.round(emission_factor * converted_price) * -1;
+                let val = Math.round(emission_factor * converted_price*-10);
 
                 const new_score = await updateScore(val);
             
@@ -170,9 +182,9 @@ export async function foodVal(category, type, location, price) {
 
 //Emission factor for calculating transportation value.
 const trans_factor = {
-    "car": 0.332,
-    "bus": 0.056,
-    "train": 0.099
+    "Car": 0.332,
+    "Bus": 0.056,
+    "Train": 0.099
 };
 
 //Types of vehicles which the score can be calculated
@@ -187,7 +199,7 @@ export async function transVal(vehicle, miles) {
     try {
         if(trans_factor.hasOwnProperty(vehicle)) {
             let emission_factor = trans_factor[vehicle];
-            let val = Math.round(emission_factor * miles) * -1;
+            let val = Math.round(emission_factor * miles*-10);
     
             const new_score = await updateScore(val);
     
@@ -216,19 +228,41 @@ export const electricity_location = Object.keys(electricity_factor);
 //Return the calculated value of the electricity entry if score updates successfully.
 export async function electricityVal(location, usage) {
     try {
-        let converted_usage = Math.round(usage / 10) / 100;
+        const offset = 2520;
+        let converted_usage = usage / 1000;
         if(electricity_factor.hasOwnProperty(location)) {
             let emission_factor = electricity_factor[location];
-            let val = Math.round(emission_factor * converted_usage  * 0.453) * -1;
+            let val = Math.round(emission_factor * converted_usage  * 0.453 * -10);
 
-            const new_score = await updateScore(252 + val);
+            const new_score = await updateScore(offset + val);
             
             if(new_score != undefined) {
                 await saveVal(val, "electricity");
+                await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
                 return val;
             }
         }
     } catch (error) {
+        console.log(error);
+    }
+}
+
+//Check if the user request for making a new energy entry is made
+//at least 30 days after the last request.
+//Return 0 if is true and otherwise return the time, in millisecond, 
+//that the user still need to wait before able to create a new
+//entry.
+export async function allowElectricityEntry() {
+    try {
+        const last_allow = Number(await SecureStore.getItemAsync("lastAllowTime"));
+        if(last_allow == undefined) {
+            await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
+            return 0;
+        }
+
+        const cycle = 24 * 60 * 60 * 1000 * 30;
+        return Math.max(0, cycle - (Date.now() - last_allow));
+    } catch(error) {
         console.log(error);
     }
 }

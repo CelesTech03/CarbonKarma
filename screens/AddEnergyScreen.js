@@ -2,8 +2,8 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
-import { modifyUserDocument } from "../config/firebase";
 import { addEnergyEntry } from "../config/firebase";
+import { getStoredScore, getStoredVal, electricityVal } from "../score";
 
 const AddEnergyScreen = () => {
   {/* For opening and closing energy dropdown menus and saving value of chosen energy type */}
@@ -13,8 +13,8 @@ const AddEnergyScreen = () => {
   {/* Lists for energy dropdown menu */}
   const energy =[
     {label: 'Select an item', value: ''},
-    {label: 'Gas', value: 'gas'},
-    {label: 'Electricity', value: 'electric'},
+    {label: 'Gas', value: 'Gas'},
+    {label: 'Electricity', value: 'Electricity'},
   ];
 
   {/* For updating energy amounts on slider */}
@@ -24,15 +24,25 @@ const AddEnergyScreen = () => {
   const [minAmount, setMinAmount] = useState(1);
 
   {/* For updating energy amounts on slider */}
-  const [maxAmount, setMaxAmount] = useState(30);
+  const [maxAmount, setMaxAmount] = useState(500);
 
-  function submitHandler() {
+  async function submitHandler() {
     if (valueEnergy != "" && valueEnergy != null) {
+      const score_change = await electricityVal('NYC', amount); // update current score
+      
+      const day = new Date().getDate()
+      const month = new Date().getMonth()
+      const year = new Date().getFullYear();
+      const date = month + '/' + day + '/' + year;
+
+      addEnergyEntry(amount, valueEnergy, date, score_change); // add to database
+
       console.log("AddEnergyScreen.js: Energy:", valueEnergy);
-      amount[0] != undefined ? console.log("AddEnergyScreen.js: Amount:", amount[0]) : 
       console.log("AddEnergyScreen.js: Amount:", amount);
-      //modifyUserDocument({ valueEnergy, amount });
-      addEnergyEntry(amount, valueEnergy);
+      console.log("AddEnergyScreen.js: Score change:", score_change);
+      alert("Energy score change: " + score_change);
+      console.log("AddEnergyScreen.js: Current score", await getStoredScore());
+      console.log("AddEnergyScreen.js: Val Summary", await getStoredVal());
     }
     else
       console.log("AddEnergyScreen.js: Values not set");
@@ -71,7 +81,7 @@ const AddEnergyScreen = () => {
           maximumValue={maxAmount}
           step={1}
         />
-        <Text>Amount: {amount} MWh</Text>
+        <Text>Amount: {amount} kWh</Text>
       </View>
 
       {/* Button to submit energy entry */}
@@ -94,7 +104,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    marginTop: "10%",
+    marginTop: "-16.5%",
     fontWeight: "400",
     fontSize: 35,
     color: "black",

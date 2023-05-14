@@ -1,11 +1,31 @@
 // Import the functions you need from the SDKs you need
+
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
 import { updateEmail, updatePassword } from "firebase/auth";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import {API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID} from "@env"
+
+import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import { getReactNativePersistence } from 'firebase/auth/react-native';
+import { initializeAuth } from 'firebase/auth/react-native';
+import { getAuth } from 'firebase/auth/react-native';
+
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASUREMENT_ID,
+} from "@env";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,10 +46,16 @@ let app;
 if (firebase.apps.length == 0) {
   app = firebase.initializeApp(firebaseConfig);
 } else {
-  app = firebase.app();
+  app = firebase.app(); 
 }
 
-const auth = firebase.auth();
+let auth = getAuth(app);
+if(auth == undefined) {
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
+}
+
 export { auth };
 
 const firestore = firebase.firestore();
@@ -48,8 +74,8 @@ export const createUserDocument = async (user, additionalData) => {
 
   // If there is no document (snapshot) of user then create one
   if (!snapshot.exists) {
-    const {email} = user;
-    const {userName, fullName} = additionalData;
+    const { email } = user;
+    const { userName, fullName } = additionalData;
 
     try {
       userRef.set({
@@ -58,11 +84,11 @@ export const createUserDocument = async (user, additionalData) => {
         userName,
         createdAt: new Date(),
       });
-    } catch(error) {
+    } catch (error) {
       console.log('Error in creating user', error);
     }
   }
-}
+};
 
 // Modifies existing user document (data)
 // export const modifyUserDocument = async (additionalData) => {
@@ -89,73 +115,92 @@ export const createUserDocument = async (user, additionalData) => {
 //   }
 // }
 
-
-export const addFoodOrder = async (amount, valueFood, valueLoc) => {
+export const addFoodOrder = async (amount, valueFood, valueLoc, date, score_change) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
 
   try {
     // Create a new food order subcollection and add the data
-    const newFoodOrderRef = await addDoc(collection(currentUserDocRef, "foodOrders"), {
-      amount: amount[0],
-      food: valueFood,
-      location: valueLoc,
-    });
-    console.log("Firebase.js: New food order added with ID:", newFoodOrderRef.id);
+    const newFoodOrderRef = await addDoc(
+      collection(currentUserDocRef, "foodOrders"),
+      {
+        amount: amount,
+        food: valueFood,
+        location: valueLoc,
+        date: date,
+        score_change: score_change,
+      }
+    );
+    console.log(
+      "Firebase.js: New food order added with ID:",
+      newFoodOrderRef.id
+    );
   } catch (error) {
     console.error("Firebase.js: Error adding food order:", error);
   }
 };
 
-export const addEnergyEntry = async (amount, valueEnergy) => {
+export const addEnergyEntry = async (amount, valueEnergy, date, score_change) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
 
   try {
     // Create a new energy entry subcollection and add the data
-    const newEnergyEntryRef = await addDoc(collection(currentUserDocRef, "energyEntries"), {
-      amount: amount[0],
-      energy: valueEnergy,
-    });
-    console.log("Firebase.js: New energy entry added with ID:", newEnergyEntryRef.id);
+    const newEnergyEntryRef = await addDoc(
+      collection(currentUserDocRef, "energyEntries"),
+      {
+        amount: amount,
+        energy: valueEnergy,
+        date: date,
+        score_change: score_change
+      }
+    );
+    console.log(
+      "Firebase.js: New energy entry added with ID:",
+      newEnergyEntryRef.id
+    );
   } catch (error) {
     console.error("Firebase.js: Error adding energy entry:", error);
   }
 };
 
-export const addTransport = async (method, mileage) => {
+export const addTransport = async (method, mileage, date, score_change) => {
   // Gets the current user
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = doc(db, "users", currentUserId)
 
   // Adds the User mileage to the subcollection
   try {
-    const newTransportRef = await addDoc(collection(currentUserDocRef, "UserTransports"), {
+    const newTransportRef = await addDoc(
+      collection(currentUserDocRef, "UserTransports"), {
       method: method,
-      distance: mileage[0]
-    })
+      distance: mileage[0],
+      date: date,
+      score_change: score_change,
+    }
+    );
     console.log("Added User Transport for ID: ", newTransportRef.id)
   } catch (error) {
     console.log("Failed to add User Transport: ", error)
   }
-}
+};
 
 export const UpdateCity = async (city) => {
   // Gets the current User
-  const currentUserId = auth.currentUser.uid
-  const currentUserDocRef = doc(db, "users", currentUserId)
+  const currentUserId = auth.currentUser.uid;
+  const currentUserDocRef = doc(db, "users", currentUserId);
 
   // Updates User doc with onboarding answer
   try {
     updateDoc(currentUserDocRef, {
-      address: city
-    })
+      address: city,
+    });
   } catch (error) {
-    console.log("Failed to add city.")
+    console.log("Failed to add city.");
   }
-}
+};
 
 export const UpdateCar = async (car) => {
   // Gets the current User

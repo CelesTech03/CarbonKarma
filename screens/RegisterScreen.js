@@ -5,12 +5,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import { React, useContext } from "react";
 import styles from "./styles/AuthStyle";
 import { auth, createUserDocument } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { addScore } from "../score";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+
+import { AuthContext } from "../AuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth/react-native";
 
 // Formik validation schema: https://formik.org/docs/guides/validation
 const SignupSchema = Yup.object().shape({
@@ -40,22 +47,42 @@ const SignupSchema = Yup.object().shape({
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
+  const { register } = useContext(AuthContext);
+
   // Firebase Signup
   function handleSignUp({ email, password, userName, fullName }) {
-    auth
-      // Creates new user
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        navigation.navigate("Onboarding");
+        
         console.log("Resgistered with:", user.email);
+        
         // Stores email, username, and fullname in Database
-        return createUserDocument(user, { email, userName, fullName });
-      })
-      .then(() => {
-        console.log("User document created successfully");
+        return createUserDocument(user, { email, userName, fullName }).then(
+          () => {
+            console.log("User document created successfully");
+            addScore();
+            navigateToHomepage();
+          }
+        );
       })
       .catch((error) => alert(error.message));
+  }
+
+  // Ensures user data is loaded before navigating to homepage
+  async function navigateToHomepage() {
+    const user = await firebase.auth().currentUser;
+  
+    if (user) {
+      const snapshot = await firebase.firestore()
+        .collection("users")
+        .doc(user.uid)
+        .get();
+  
+      if (snapshot.exists) {
+        register();
+      }
+    }
   }
 
   return (
@@ -161,7 +188,7 @@ const RegisterScreen = () => {
                 onPress={handleSubmit}
                 /* Checks if form inputs are valid. If valid, user can click on create account. 
                 If not button functionality is disabled and different background color */
-                disabled={!isValid}
+                //disabled={!isValid}
                 style={[
                   styles.button,
                   { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },
