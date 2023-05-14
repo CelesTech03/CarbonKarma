@@ -3,11 +3,8 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, addDoc, updateDoc, getFirestore } from "firebase/firestore";
 import { updateEmail, updatePassword } from "firebase/auth";
-
-import { getFirestore } from "firebase/firestore";
-
 import { AsyncStorage } from '@react-native-async-storage/async-storage';
 import { getReactNativePersistence } from 'firebase/auth/react-native';
 import { initializeAuth } from 'firebase/auth/react-native';
@@ -173,7 +170,7 @@ export const addTransport = async (method, mileage, date, score_change) => {
     const newTransportRef = await addDoc(
       collection(currentUserDocRef, "UserTransports"), {
       method: method,
-      distance: mileage[0],
+      mileage: mileage,
       date: date,
       score_change: score_change,
     }

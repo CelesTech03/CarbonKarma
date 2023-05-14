@@ -9,12 +9,14 @@ const BottomNav = () => {
   {/* For choosing whether to display addfood/transportation/energy icons or not */}
   const [topmenu, setTopMenu] = useState(false);
 
+  {/* Navigation object used to move between different screens when menu icons are pressed */}
   const navigation = useNavigation();
 
   return (
     <View style={styles.navContainer} >
       <View style={[topmenu == true ? styles.topMenuSelected : styles.topMenuNotSelected]} >
-        {/* Buttons to navigate to different add screens */}
+        {/* Buttons to navigate to AddFood/Energy/Transportation screens. Buttons are normally hidden
+            unless middle "+" icon is pressed (i.e. unless topmenu == true).*/}
         <TouchableOpacity onPress={() => {setButtons(4); navigation.navigate("AddFood"); setTopMenu(!topmenu)}}
           style={[buttons == 4 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Image style={styles.image} source={require('../assets/carrot.png')}/>
@@ -28,8 +30,9 @@ const BottomNav = () => {
           <Image style={styles.image} source={require('../assets/bus2.png')}/>
         </TouchableOpacity>
       </View>
+
       <View style={styles.bottomMenu} >
-        {/* Buttons to navigate to different non-add screens */}
+        {/* Buttons to navigate to all other non-add screens */}
         <TouchableOpacity onPress={() =>{setButtons(0); setTopMenu(false); navigation.navigate("Homepage")}}
           style={[buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected]}>
           <Image style={styles.image} source={require('../assets/home.png')}/>

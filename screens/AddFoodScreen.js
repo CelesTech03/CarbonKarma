@@ -5,23 +5,35 @@ import { Slider } from "@miblanchard/react-native-slider";
 import { addFoodOrder } from "../config/firebase";
 import { foodVal, getStoredScore, getStoredVal } from "../score";
 
+{/* Screen contains a dropdown menu for item type and purchase location. A third-party library, React Native Dropdown Picker, was
+used for this and its proper usage is documented at https://hossein-zare.github.io/react-native-dropdown-picker-website/docs/usage
+
+Screen also contains a slider for setting purchase amounts. A third-party library, react-native-slider, was
+used for this and its proper usage is documented at https://github.com/miblanchard/react-native-slider */}
+
 const AddFoodScreen = () => {
-  { /* For opening and closing food dropdown menus and saving value of chosen food */ }
+  { /* For opening and closing food dropdown menus and saving value of chosen food e.g. when openFood
+is true, the food dropdown menu is open. Possible values of valueFood are specific types of food such as
+"chicken", "pork", "fruits", or "milk". valueFood is sent to score.js to calculate score changes. */ }
   const [openFood, setOpenFood] = useState(false);
   const [valueFood, setValueFood] = useState(null);
 
-  { /* For opening and closing loc dropdown menus and saving value of chosen loc.
-    Value is true if food was purchased from farmer's market, false otherwise*/ }
+  { /* For opening and closing loc dropdown menus and saving value of chosen loc e.g. when openLoc
+is true, the location dropdown menu is open. valueLoc is "Farmer's market" or "Grocery Store".
+valueLoc is sent to score.js to calculate score changes. */ }
   const [openLoc, setOpenLoc] = useState(false);
   const [valueLoc, setValueLoc] = useState(null);
 
-  { /* For saving whether user is currently on Meat, Plants, or Dairy tab */ }
+  { /* For saving whether user is currently on Meat, Plants, or Dairy tab. Possible values are "meat", "plants",
+  or "dairy". This value is sent to score.js to determine how much the score changes when submitting an entry. */ }
   const [category, setCategory] = useState('meat');
 
+  { /* When the food dropdown menu is opened, the location dropdown menu should be closed. */}
   const onOpenFood = useCallback(() => {
     setOpenLoc(false);
   }, []);
 
+  { /* When the location dropdown menu is opened, the food dropdown menu should be closed. */}
   const onOpenLoc = useCallback(() => {
     setOpenFood(false);
   }, []);
@@ -57,15 +69,17 @@ const AddFoodScreen = () => {
   { /* For choosing which button to highlight; default is 0 for Meat button; set to 1 for Vegs; set to 2 for Dairy */ }
   const [buttons, setButtons] = useState(0);
 
-  { /* For updating food amounts on slider */ }
+  { /* For setting food amounts on slider */ }
   const [amount, setAmount] = useState(1);
 
-  { /* For updating food amounts on slider */ }
+  { /* For setting minimum food amounts on slider */ }
   const [minAmount, setMinAmount] = useState(1);
 
-  { /* For updating food amounts on slider */ }
+  { /* For setting maximum amounts on slider */ }
   const [maxAmount, setMaxAmount] = useState(100);
 
+  {/* Calls on addFoodEntry() function from firebase.js to create Firestore entry. Also calls on foodVal()
+function from score.js to calculate the resulting score change and update the user's score accordingly. */}
   async function submitHandler() {
     if (
       valueFood != "" &&
@@ -75,23 +89,26 @@ const AddFoodScreen = () => {
     ) {
       const score_change = await foodVal(category, valueFood, valueLoc, amount);
       
-      const day = new Date().getDate()
-      const month = new Date().getMonth()
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
       
       addFoodOrder(amount, valueFood, valueLoc, date, score_change);
+      alert("Food score change: " + score_change);
 
       console.log("AddFoodScreen.js: Category:", category);
       console.log("AddFoodScreen.js: Food:", valueFood);
       console.log("AddFoodScreen.js: Location:", valueLoc);
       console.log("AddFoodScreen.js: Amount:", amount);
       console.log("AddFoodScreen.js: Score change:", score_change);
-      alert("Food score change: " + score_change);
       console.log("AddFoodScreen.js: Current score", await getStoredScore());
       console.log("AddFoodScreen.js: Val Summary", await getStoredVal());
-
-    } else console.log("AddFoodScreen.js: Values not set");
+    }
+    else {
+      alert("Invalid entry");
+      console.log("AddFoodScreen.js: Values not set");
+    }
   }
 
   return (
@@ -166,9 +183,6 @@ const AddFoodScreen = () => {
           setOpen={setOpenFood}
           setValue={setValueFood}
           setItems={setItems}
-          onChangeValue={(value) => {
-            //console.log("AddFoodScreen.js: Food:", value)
-          }}
         />
         <DropDownPicker
           style={{ marginTop: "1.5%" }}
@@ -181,9 +195,6 @@ const AddFoodScreen = () => {
           items={location}
           setOpen={setOpenLoc}
           setValue={setValueLoc}
-          onChangeValue={(value) => {
-            //console.log("AddFoodScreen.js: Location:", location)
-          }}
         />
       </View>
 

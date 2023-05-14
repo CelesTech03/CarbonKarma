@@ -19,6 +19,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
   { /* For choosing which button to highlight; default is 0 for Food button; set to 1 for Energy; set to 2 for Transportation */ }
   const [buttons, setButtons] = useState(0);
+  
   // Fetches user data from the users collection in database using their uid (unique id)
   useEffect(() => {
     if (isFocused) {
@@ -26,7 +27,7 @@ const HistoryScreen = ({ navigation }) =>  {
         if (user) {
           // get the foodOrders collection
           db.collection("users")
-            .doc(user.uid).collection("foodOrders")
+            .doc(user.uid).collection("foodOrders").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];
@@ -41,7 +42,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
           // get the energyEntries collection
           db.collection("users")
-            .doc(user.uid).collection("energyEntries")
+            .doc(user.uid).collection("energyEntries").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];
@@ -55,7 +56,7 @@ const HistoryScreen = ({ navigation }) =>  {
 
           // get the foodOrders collection
           db.collection("users")
-            .doc(user.uid).collection("UserTransports")
+            .doc(user.uid).collection("UserTransports").orderBy("date", "desc")
             .get()
             .then(querySnapshot => {       
               let temp = [];
@@ -141,21 +142,21 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {foodOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column1}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text} >{order.data.date}</Text>
               </Col>
               <Col style={styles.column1}>
-                <Text style={styles.row_text} key={order.id}>{order.data.food}</Text>
+                <Text style={styles.row_text}>{order.data.food}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.location}</Text>
+                <Text style={styles.row_text}>{order.data.location}</Text>
               </Col>
               <Col style={styles.column3}>
-                <Text style={styles.row_text} key={order.id}>${order.data.amount}</Text>
+                <Text style={styles.row_text}>${order.data.amount}</Text>
               </Col>
               <Col style={styles.column3}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}
@@ -219,18 +220,18 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {energyOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text}>{order.data.date}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.energy}</Text>
+                <Text style={styles.row_text}>{order.data.energy}</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.amount} kWh</Text>
+                <Text style={styles.row_text}>{order.data.amount} kWh</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}
@@ -294,18 +295,18 @@ const HistoryScreen = ({ navigation }) =>  {
           </Row>
 
           {transportOrders.map((order) => (
-            <Row style={styles.row}>
+            <Row style={styles.row} key={order.id}>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.date}</Text>
+                <Text style={styles.row_text}>{order.data.date}</Text>
               </Col>
               <Col style={styles.column2}>
-                <Text style={styles.row_text} key={order.id}>{order.data.method}</Text>
+                <Text style={styles.row_text}>{order.data.method}</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.mileage} miles</Text>
+                <Text style={styles.row_text}>{order.data.mileage} miles</Text>
               </Col>
               <Col style={styles.column4}>
-                <Text style={styles.row_text} key={order.id}>{order.data.score_change}</Text>
+                <Text style={styles.row_text}>{order.data.score_change}</Text>
               </Col>
             </Row>
           ))}

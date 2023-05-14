@@ -16,6 +16,9 @@ import { getStoredScore, getStoredVal, transVal } from "../score";
 
 const AddTransportationScreen = () => {
   //values for dropdown
+  {/* For opening and closing transportation dropdown menus and saving value of chosen type e.g. when open is true,
+  the transportation dropdown menu is open. Possible values of value are "Car", "Bus", or "Train". value is sent to
+  score.js to calculate score changes. method is used to determine the contents of the dropdown menu. */}
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [method, setMethod] = useState([
@@ -39,27 +42,31 @@ const AddTransportationScreen = () => {
   //values for submission result modal
   const [modalVisible, setModalVisible] = useState(false);
   const score = 500;
-
+  
+  {/* Calls on addTransport() function from firebase.js to create Firestore entry. Also calls on transVal()
+  function from score.js to calculate the resulting score change and update the user's score accordingly. */}
   async function submitTransportHandler() {
     if (value != null) {
       const score_change = await transVal(value, mileage);
       
-      const day = new Date().getDate()
-      const month = new Date().getMonth()
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
 
-      addTransport(value, mileage, date, score_change);
+      addTransport(value, parseInt(mileage), date, score_change);
+      alert("Transportation score change: " + score_change);
 
       console.log("Method: ", value);
-      mileage[0] != undefined
-        ? console.log("Mileage: ", mileage)
-        : console.log("Mileage: ", mileage);
+      console.log("Mileage: ", parseInt(mileage));
       console.log("AddTransScreen.js: Score change:", score_change);
-      alert("Transportation score change: " + score_change);
       console.log("AddTransScreen.js: Current score", await getStoredScore());
       console.log("AddTransScreen.js: Val Summary", await getStoredVal());
-    } else console.log("Method is not set.");
+    }
+    else {
+      alert("Invalid entry");
+      console.log("AddTransportationScreen.js: Method is not set.");
+    }
   }
 
   function handleValueChange(value) {
