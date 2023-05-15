@@ -90,5 +90,41 @@ export default StyleSheet.create({
     fontSize: 16,
     marginLeft: 40,
     marginBottom: 20
+  },
+  settingsInput: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: '#777',
+    padding: 8,
+    margin: 10,
+    width: 200
+  },
+  dropdownContainer: {
+    marginTop: "7%",
+    width: "80%",
+    zIndex: 100,
+  },
+  settingsButton: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  settingsSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  modalIcon: {
+    marginBottom: 0,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginTop: 20,
   }
 });

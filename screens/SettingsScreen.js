@@ -10,8 +10,9 @@ import { signOut } from "firebase/auth";
 import { UpdateEmail, UpdateLoc } from "../config/firebase";
 import * as Yup from "yup";
 import { resetScore } from "../score";
-
+import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../AuthContext";
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ChangeSchema = Yup.object().shape({
   new_email: Yup.string().email("Invalid email").required("Required"),
@@ -111,11 +112,12 @@ const SettingsScreen = ({ navigation }) =>  {
       {/* Modal for changing the user location */}
       <Modal
         visible = {modalLocOpen}
-        animationType = "slide">
+        animationType = "slide"
+        onRequestClose = {() => setmodalLocOpen(false)}>
         <View style = {styles.container}>
           <Text style = {styles.text}>Where do you live now?</Text>
     
-          <View>
+          <View style = {styles.dropdownContainer}>
             <DropDownPicker
               open = {open}
               items = {items}
@@ -140,13 +142,19 @@ const SettingsScreen = ({ navigation }) =>  {
         visible = {modalPassOpen}
         animationType = "slide">
         <View style = {styles.container}>
+          <MaterialIcons
+            name = 'close'
+            size = {30}
+            style = {styles.modalIcon}
+            onPress = {() => setmodalPassOpen(false)}/>
           <Formik
                   initialValues={{ new_password: '',
                                   confirm_new_password: '' }}
                   onSubmit={(values) => {console.log(values)
                               alert('The password has changed.')
                               setmodalPassOpen(false)
-                              UpdatePass(values.new_password)}}
+                              //UpdatePass(values.new_password)
+                            }}
                   validationSchema={ChangeSchema}
               >
                   {({values,
@@ -185,17 +193,27 @@ const SettingsScreen = ({ navigation }) =>  {
                               <Text style={styles.errorText}>{errors.confirm_new_password}</Text>
                           )}
 
-                          <Button
-                              title="Change Password"
-                              onPress={handleSubmit}
-                          />
+                        <TouchableOpacity
+                          onPress={handleSubmit}>
+                        <LinearGradient
+                          colors={["#08d4c4", "#00695C"]}
+                          style={styles.settingsButton}
+                        >
+                          <Text
+                            style={[
+                              styles.settingsSign,
+                              {
+                                color: "#fff"
+                              },
+                            ]}
+                          >
+                            Change Password
+                          </Text>
+                        </LinearGradient>
+                        </TouchableOpacity>
                       </View>
                   )}
               </Formik>
-          <Button
-            title="close pass"
-            onPress={() => setmodalPassOpen(false)}
-          />
         </View>
       </Modal>
 
@@ -203,8 +221,14 @@ const SettingsScreen = ({ navigation }) =>  {
       {/* Modal for changing the user email */}
       <Modal
         visible = {modalEmailOpen}
-        animationType = "slide">
+        animationType = "slide"
+        onRequestClose={() => setmodalEmailOpen(false)}>
         <View style = {styles.container}>
+          <MaterialIcons
+              name = 'close'
+              size = {30}
+              style = {styles.modalIcon}
+              onPress = {() => setmodalEmailOpen(false)}/>
             <Formik
                 initialValues={{ new_email: '',
                                 confirm_new_email: '' }}
@@ -212,8 +236,11 @@ const SettingsScreen = ({ navigation }) =>  {
                     alert('The email has changed.')
                     UpdateEmail(values.new_email)
                     setmodalEmailOpen(false)}}
+                //validationSchema={ChangeSchema}
             >
                 {({values,
+                    touched,
+                    errors,
                     handleSubmit,
                     handleChange,
                     setFieldTouched}) => (
@@ -221,7 +248,7 @@ const SettingsScreen = ({ navigation }) =>  {
                         <Text style = {styles.labelText}>Enter New Email: </Text>
 
                         <TextInput
-                            style = {styles.input}
+                            style = {styles.settingsInput}
                             placeholder = 'New Email'
                             onChangeText={handleChange('new_email')}
                             value={values.new_email}
@@ -231,18 +258,32 @@ const SettingsScreen = ({ navigation }) =>  {
 
                         <Text style={styles.labelText}>Confirm New Email:</Text>
                         <TextInput
-                            style={styles.input}
+                            style={styles.settingsInput}
                             placeholder="Confirm Email"
                             value={values.confirm_new_email}
                             onChangeText={handleChange("confirm_new_email")}
                             onBlur={() => setFieldTouched("confirm_new_email")}
                             autoCapitalize={false}
                         />
-
-                        <Button
-                            title="Change Email"
-                            onPress={handleSubmit}
-                        />
+                        
+                        <TouchableOpacity
+                          onPress={handleSubmit}>
+                        <LinearGradient
+                          colors={["#08d4c4", "#00695C"]}
+                          style={styles.settingsButton}
+                        >
+                          <Text
+                            style={[
+                              styles.settingsSign,
+                              {
+                                color: "#fff"
+                              },
+                            ]}
+                          >
+                            Change Email
+                          </Text>
+                        </LinearGradient>
+                        </TouchableOpacity>
                     </View>
                 )}
             </Formik>
