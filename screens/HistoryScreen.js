@@ -5,8 +5,15 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { useIsFocused } from "@react-navigation/native";
 import { collection } from "@firebase/firestore";
-//import { Table, Row, Rows } from 'react-native-table-component';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { LinearGradient } from 'expo-linear-gradient';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+
+{/* Screen contains a third-party library, react-native-easy-grid, for displaying information in a table. Its proper usage is documented at
+https://github.com/GeekyAnts/react-native-easy-grid *
+
+Screen also uses a third-party library for displaying gradient backgrounds, react-native-linear-gradient. Its proper usage is documented at
+https://blog.logrocket.com/complex-gradients-react-native-linear-gradient/ */}
 
 const HistoryScreen = ({ navigation }) =>  {
   const isFocused = useIsFocused();
@@ -20,7 +27,7 @@ const HistoryScreen = ({ navigation }) =>  {
   { /* For choosing which button to highlight; default is 0 for Food button; set to 1 for Energy; set to 2 for Transportation */ }
   const [buttons, setButtons] = useState(0);
   
-  // Fetches user data from the users collection in database using their uid (unique id)
+  // Fetches user data from the users collection in database using their uid (unique id) and sort by their dates in descending order.
   useEffect(() => {
     if (isFocused) {
       firebase.auth().onAuthStateChanged((user) => {
@@ -85,8 +92,14 @@ const HistoryScreen = ({ navigation }) =>  {
 
   if (buttons == 0) {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.title}>History</Text>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container} behavior="padding" >
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['rgba(0,0,255,0.75)', 'transparent']}
+          style={styles.top}
+        >
+          <Text style={styles.title}>History</Text>
+        </LinearGradient>
 
         {/* Buttons to choose type of food */}
         <View style={styles.buttonContainer}>
@@ -98,7 +111,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Food</Text>
+            <Text style={[
+              buttons == 0 ? styles.textSelected : styles.textNotSelected,
+            ]}>Food</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -108,7 +123,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Energy</Text>
+            <Text style={[
+              buttons == 1 ? styles.textSelected : styles.textNotSelected,
+            ]}>Energy</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -118,56 +135,38 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Transport</Text>
+            <Text style={[
+              buttons == 2 ? styles.textSelected : styles.textNotSelected,
+            ]}>Transport</Text>
           </TouchableOpacity>
         </View>
 
-        <Grid style={styles.table}>
-          <Row style={styles.header_row}>
-            <Col style={styles.column1}>
-              <Text style={styles.header_text}>Date</Text>
-            </Col>
-            <Col style={styles.column1}>
-              <Text style={styles.header_text}>Item</Text>
-            </Col>
-            <Col style={styles.column2}>
-              <Text style={styles.header_text}>Location</Text>
-            </Col>
-            <Col style={styles.column3}>
-              <Text style={styles.header_text}>Amount</Text>
-            </Col>
-            <Col style={styles.column3}>
-              <Text style={styles.header_text}>Karma</Text>
-            </Col>
-          </Row>
-
-          {foodOrders.map((order) => (
-            <Row style={styles.row} key={order.id}>
-              <Col style={styles.column1}>
-                <Text style={styles.row_text} >{order.data.date}</Text>
-              </Col>
-              <Col style={styles.column1}>
-                <Text style={styles.row_text}>{order.data.food}</Text>
-              </Col>
-              <Col style={styles.column2}>
-                <Text style={styles.row_text}>{order.data.location}</Text>
-              </Col>
-              <Col style={styles.column3}>
-                <Text style={styles.row_text}>${order.data.amount}</Text>
-              </Col>
-              <Col style={styles.column3}>
-                <Text style={styles.row_text}>{order.data.score_change}</Text>
-              </Col>
-            </Row>
-          ))}
-        </Grid>
-      </KeyboardAvoidingView>
+        {foodOrders.map((order) => (
+          <View style={styles.entryContainer} key={order.id}>
+            <View>
+              <Text style={styles.date}>{order.data.date}</Text>
+              <View style={styles.innerContainer}>
+                <Text style={styles.item}>{order.data.food}</Text>
+                <Text style={styles.location}> @ {order.data.location}</Text>
+                <Text style={styles.amount}> (${order.data.amount})</Text>
+                <Text style={styles.score_change}>{order.data.score_change}</Text>
+              </View>
+            </View>
+          </View>
+        ))}
+      </KeyboardAwareScrollView>
     );
   }
   else if (buttons == 1) {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.title}>History</Text>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container} behavior="padding">
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['rgba(0,0,255,0.75)', 'transparent']}
+          style={styles.top}
+        >
+          <Text style={styles.title}>History</Text>
+        </LinearGradient>
 
         {/* Buttons to choose type of food */}
         <View style={styles.buttonContainer}>
@@ -179,7 +178,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Food</Text>
+            <Text style={[
+              buttons == 0 ? styles.textSelected : styles.textNotSelected,
+            ]}>Food</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -189,7 +190,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Energy</Text>
+            <Text style={[
+              buttons == 1 ? styles.textSelected : styles.textNotSelected,
+            ]}>Energy</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -199,50 +202,36 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Transport</Text>
+            <Text style={[
+              buttons == 2 ? styles.textSelected : styles.textNotSelected,
+            ]}>Transport</Text>
           </TouchableOpacity>
         </View>
-
-        <Grid style={styles.table}>
-          <Row style={styles.header_row}>
-            <Col style={styles.column2}>
-              <Text style={styles.header_text}>Date</Text>
-            </Col>
-            <Col style={styles.column2}>
-              <Text style={styles.header_text}>Item</Text>
-            </Col>
-            <Col style={styles.column4}>
-              <Text style={styles.header_text}>Amount</Text>
-            </Col>
-            <Col style={styles.column4}>
-              <Text style={styles.header_text}>Karma</Text>
-            </Col>
-          </Row>
-
-          {energyOrders.map((order) => (
-            <Row style={styles.row} key={order.id}>
-              <Col style={styles.column2}>
-                <Text style={styles.row_text}>{order.data.date}</Text>
-              </Col>
-              <Col style={styles.column2}>
-                <Text style={styles.row_text}>{order.data.energy}</Text>
-              </Col>
-              <Col style={styles.column4}>
-                <Text style={styles.row_text}>{order.data.amount} kWh</Text>
-              </Col>
-              <Col style={styles.column4}>
-                <Text style={styles.row_text}>{order.data.score_change}</Text>
-              </Col>
-            </Row>
-          ))}
-        </Grid>
-      </KeyboardAvoidingView>
+        {energyOrders.map((order) => (
+          <View style={styles.entryContainer} key={order.id}>
+            <View>
+              <Text style={styles.date}>{order.data.date}</Text>
+              <View style={styles.innerContainer}>
+                <Text style={styles.item}>{order.data.energy}</Text>
+                <Text style={styles.amount}> ({order.data.amount} kWh)</Text>
+                <Text style={styles.score_change}>{order.data.score_change}</Text>
+              </View>
+            </View>
+          </View>
+        ))}
+      </KeyboardAwareScrollView>
     );
   }
   else {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.title}>History</Text>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container} behavior="padding">
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['rgba(0,0,255,0.75)', 'transparent']}
+          style={styles.top}
+        >
+          <Text style={styles.title}>History</Text>
+        </LinearGradient>
 
         {/* Buttons to choose type of food */}
         <View style={styles.buttonContainer}>
@@ -254,7 +243,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 0 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Food</Text>
+            <Text style={[
+              buttons == 0 ? styles.textSelected : styles.textNotSelected,
+            ]}>Food</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -264,7 +255,9 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 1 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Energy</Text>
+            <Text style={[
+              buttons == 1 ? styles.textSelected : styles.textNotSelected,
+            ]}>Energy</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -274,44 +267,26 @@ const HistoryScreen = ({ navigation }) =>  {
               buttons == 2 ? styles.buttonSelected : styles.buttonNotSelected,
             ]}
           >
-            <Text>Transport</Text>
+            <Text style={[
+              buttons == 2 ? styles.textSelected : styles.textNotSelected,
+            ]}>Transport</Text>
           </TouchableOpacity>
         </View>
 
-        <Grid style={styles.table}>
-          <Row style={styles.header_row}>
-            <Col style={styles.column2}>
-              <Text style={styles.header_text}>Date</Text>
-            </Col>
-            <Col style={styles.column2}>
-              <Text style={styles.header_text}>Item</Text>
-            </Col>
-            <Col style={styles.column4}>
-              <Text style={styles.header_text}>Distance</Text>
-            </Col>
-            <Col style={styles.column4}>
-              <Text style={styles.header_text}>Karma</Text>
-            </Col>
-          </Row>
-
-          {transportOrders.map((order) => (
-            <Row style={styles.row} key={order.id}>
-              <Col style={styles.column2}>
-                <Text style={styles.row_text}>{order.data.date}</Text>
-              </Col>
-              <Col style={styles.column2}>
-                <Text style={styles.row_text}>{order.data.method}</Text>
-              </Col>
-              <Col style={styles.column4}>
-                <Text style={styles.row_text}>{order.data.mileage} miles</Text>
-              </Col>
-              <Col style={styles.column4}>
-                <Text style={styles.row_text}>{order.data.score_change}</Text>
-              </Col>
-            </Row>
-          ))}
-        </Grid>
-      </KeyboardAvoidingView>
+        {transportOrders.map((order) => (
+          <View style={styles.entryContainer} key={order.id}>
+            <View>
+              <Text style={styles.date}>{order.data.date}</Text>
+              <View style={styles.innerContainer}>
+                <Text style={styles.item}>{order.data.method}</Text>
+                <Text style={styles.amount}> ({order.data.mileage} miles)</Text>
+                <Text style={styles.score_change}>{order.data.score_change}</Text>
+              </View>
+            </View>
+          </View>
+        ))}
+        
+      </KeyboardAwareScrollView>
     );
   }
 };
@@ -321,79 +296,92 @@ export default HistoryScreen
 // Screen styling
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     padding: 10,
+    height: "150%",
+  },
+  top: {
+    backgroundColor: "#1E90FF",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: "10%",
+    marginTop: "-3%",
+    width: "120%",
   },
   title: {
-    marginTop: "20%",
     fontWeight: "400",
-    fontSize: 25,
-    color: "black",
+    fontSize: 20,
+    color: "white",
+    marginTop:"10%",
   },
   buttonContainer: {
-    marginTop: "5%",
+    marginTop: "0%",
     flexDirection: "row",
     marginBottom: "5%",
   },
   buttonSelected: {
-    borderColor: "black",
-    borderWidth: 1,
-    color: "black",
-    backgroundColor: "#b9b9b9",
+    borderColor: "#4169E1",
+    borderWidth: 0,
+    borderBottomWidth: 2,
     marginRight: "3%",
     marginLeft: "3%",
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
+  },
+  textSelected: {
+    color: "#4169E1",
   },
   buttonNotSelected: {
-    borderColor: "black",
-    borderWidth: 1,
-    color: "black",
+    borderColor: "#4169E1",
+    borderWidth: 0,
     marginRight: "3%",
     marginLeft: "3%",
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
   },
-  table: {
-    color: "black",
-    borderColor: "black",
+  textNotSelected: {
+    color: "#505050",
   },
-  header_row: {
-    height: 23,
-    fontSize: 30,
-    width: "100%",
+  entryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 2.5,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginHorizontal: 5,
+    marginVertical: 3,
+    height: 50,
+    width: "95%",
+    backgroundColor: "#fff",
   },
-  row: {
-    height: 17,
-  },
-  row_text: {
+  date: {
+    color: "#505050",
     fontSize: 12,
-    color: "black",
   },
-  header_text: {
-    fontSize: 15,
-    color: "black",
-    textDecorationLine:'underline',
+  innerContainer: {
+    flexDirection: "row",
+    width: 325,
   },
-  column1: {
-    width: "20%",
+  item: {
+    fontWeight: "bold",
   },
-  column2: {
-    width: "25%",
+  amount: {
   },
-  column3: {
-    width: "17%",
-    alignItems:'center',
-  },
-  column4: {
-    width: "25%",
-    alignItems:'center',
+  score_change: {
+    marginLeft: 'auto',
   },
 });
