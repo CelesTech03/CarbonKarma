@@ -4,19 +4,22 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import React from "react";
-import styles from "./styles/AuthStyle";
+import styles from "./styles/LoginScreen";
 import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { addScore } from "../score";
-
 import { signInWithEmailAndPassword } from "firebase/auth/react-native";
-
 import { AuthContext } from "../AuthContext";
+import { LinearGradient } from "expo-linear-gradient";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from "@expo/vector-icons/Feather";
+import { useTheme } from "react-native-paper";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -32,7 +35,8 @@ const LoginSchema = Yup.object().shape({
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  
+  const { colors } = useTheme();
+
   const { logIn } = useContext(AuthContext);
 
   // Firebase Login
@@ -51,7 +55,7 @@ const LoginScreen = () => {
 
   return (
     // KeyboardAvoidingView = Prevents keyboard from blocking input fields
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAvoidingView style={styles.container}>
       <Formik
         initialValues={{
           email: "",
@@ -70,58 +74,128 @@ const LoginScreen = () => {
           handleSubmit,
         }) => (
           <>
-            <Text style={styles.title}>Carbon Karma</Text>
-
-            {/* Inputs View */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.labelText}>Email:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={() => setFieldTouched("email")}
-                autoCapitalize={false}
-              />
-              {touched.email && errors.email && (
-                <Text style={styles.errorText}>{errors.email}</Text>
-              )}
-
-              <Text style={styles.labelText}>Password:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={() => setFieldTouched("password")}
-                autoCapitalize={false}
-                // Obscures users' password
-                secureTextEntry={true}
-              />
-              {touched.password && errors.password && (
-                <Text style={styles.errorText}>{errors.password}</Text>
-              )}
+            <View style={styles.header}>
+              <Text style={styles.text_header}>Carbon Karma</Text>
             </View>
 
-            {/* Buttons View */}
-            <View style={styles.buttonContainer}>
-              {/* TouchableOpacity = A wrapper for making views respond properly to touches */}
-              <TouchableOpacity
-                onPress={handleSubmit}
-                disabled={!isValid}
+            {/* Inputs View */}
+            <View style={styles.footer}>
+              <Text
                 style={[
-                  styles.button,
-                  { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },
+                  styles.text_footer,
+                  {
+                    color: colors.text,
+                  },
                 ]}
               >
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Register")}
-                style={[styles.button, styles.buttonOutline]}
+                Email
+              </Text>
+              <View style={styles.action}>
+                <FontAwesome name="envelope-o" color={colors.text} size={20} />
+                <TextInput
+                  style={[
+                    styles.textInput,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                  placeholder="Email"
+                  placeholderTextColor="#666666"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={() => setFieldTouched("email")}
+                  autoCapitalize={false}
+                />
+                {touched.email && !errors.email && (
+                  <Feather name="check-circle" color="green" size={20} />
+                )}
+              </View>
+
+              <Text
+                style={[
+                  styles.text_footer,
+                  {
+                    color: colors.text,
+                    marginTop: 35,
+                  },
+                ]}
               >
-                <Text style={styles.buttonOutlineText}>Create Account</Text>
-              </TouchableOpacity>
+                Password
+              </Text>
+              <View style={styles.action}>
+                <Feather name="lock" color={colors.text} size={20} />
+                <TextInput
+                  style={[
+                    styles.textInput,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                  placeholder="Password"
+                  placeholderTextColor="#666666"
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={() => setFieldTouched("password")}
+                  autoCapitalize={false}
+                  // Obscures users' password
+                  secureTextEntry={true}
+                />
+                {touched.password && !errors.password && (
+                  <Feather name="check-circle" color="green" size={20} />
+                )}
+              </View>
+
+              {/* Buttons View */}
+              <View style={styles.button}>
+                {/* TouchableOpacity = A wrapper for making views respond properly to touches */}
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  disabled={!isValid}
+                  style={[
+                    styles.signIn,
+                    { backgroundColor: isValid ? "#00695C" : "#A7F1A8" },
+                  ]}
+                >
+                  <LinearGradient
+                    colors={["#08d4c4", "#00695C"]}
+                    style={styles.signIn}
+                  >
+                    <Text
+                      style={[
+                        styles.textSign,
+                        {
+                          color: "#fff",
+                        },
+                      ]}
+                    >
+                      Login
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Register")}
+                  style={[
+                    styles.signIn,
+                    {
+                      borderColor: "#00695C",
+                      borderWidth: 1,
+                      marginTop: 15,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.textSign,
+                      {
+                        color: "#00695C",
+                      },
+                    ]}
+                  >
+                    Create Account
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </>
         )}
@@ -131,3 +205,6 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
+// Gets device screen dimensions
+const { height } = Dimensions.get("screen");
