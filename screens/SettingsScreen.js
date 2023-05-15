@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View, Image, Modal } from "react-native";
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import styles from "./styles/AuthStyle";
 import { Divider } from "@rneui/themed";
 import { Formik } from "formik";
@@ -10,6 +10,8 @@ import { signOut } from "firebase/auth";
 import { UpdateEmail, UpdateLoc } from "../config/firebase";
 import * as Yup from "yup";
 import { resetScore } from "../score";
+
+import { AuthContext } from "../AuthContext";
 
 const ChangeSchema = Yup.object().shape({
   new_email: Yup.string().email("Invalid email").required("Required"),
@@ -42,6 +44,19 @@ const SettingsScreen = ({ navigation }) =>  {
       {label: 'New York City', value: 'New York City'},
       {label: 'Staten Island', value: 'Staten Island'}
   ])
+
+  const { logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        logOut();
+        console.log("Sign out successfully");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      })
+  }
 
   return (
     <KeyboardAvoidingView style={styles.settingContainer} behavior = "padding">
@@ -88,7 +103,7 @@ const SettingsScreen = ({ navigation }) =>  {
           .then(() => {
             resetScore()
             console.log('The User Signed Out.')
-            navigation.navigate("Login");
+            handleLogOut()
           })}>
         <Text style = {styles.settingText}>Log Out</Text>
       </TouchableOpacity>
