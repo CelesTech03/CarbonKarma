@@ -135,7 +135,7 @@ export const addFoodOrder = async (amount, valueFood, valueLoc, date, score_chan
   }
 };
 
-export const addEnergyEntry = async (amount, valueEnergy, date, score_change) => {
+export const addEnergyEntry = async (amount, valueEnergy, date, score_change, timestamp) => {
   // Fetches current user
   const currentUserId = auth.currentUser.uid;
   const currentUserDocRef = doc(db, "users", currentUserId);
@@ -148,7 +148,8 @@ export const addEnergyEntry = async (amount, valueEnergy, date, score_change) =>
         amount: amount,
         energy: valueEnergy,
         date: date,
-        score_change: score_change
+        score_change: score_change,
+        timestamp: timestamp,
       }
     );
     console.log(
@@ -276,4 +277,120 @@ export const UpdatePass = async (new_password) => {
 
   })
 
+}
+
+export const UpdateScore = async (new_score) => {
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
+
+  await updateDoc(currentUserDocRef, {
+    score: new_score
+  })
+}
+
+export const UpdateLastAdd = async (timestamp) => {
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = doc(db, "users", currentUserId)
+
+  await updateDoc(currentUserDocRef, {
+    lastAddTime: timestamp
+  })
+}
+
+export const getLastAdd = async () => {
+  let lastAdd = null;
+
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
+  await currentUserDocRef
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        lastAdd = snapshot.data().lastAddTime;
+      }
+    });
+    return lastAdd;
+}
+
+export const getScore = async () => {
+  let score = null;
+
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
+
+  await currentUserDocRef
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        score = snapshot.data().score;
+      }
+    });   
+
+  return score; 
+}
+
+export const getVal = async () => {
+  let vals = {
+    electricity: 0,
+    food: 0,
+    transportation: 0
+  };
+
+  const currentUserId = auth.currentUser.uid
+  const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
+
+  const day = new Date().getDate();
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+  const date = month + '/' + day + '/' + year;
+
+  await currentUserDocRef
+    .collection("UserTransports")
+    .where("date", "==", date)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        vals.transportation += Number(doc.data().score_change);
+      });
+    });
+
+  await currentUserDocRef
+    .collection("energyEntries")
+    .where("date", "==", date)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        vals.electricity += doc.data().score_change;
+      });
+    });
+
+  await currentUserDocRef
+    .collection("foodOrders")
+    .where("date", "==", date)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        vals.food += doc.data().score_change;
+      });
+    });
+  return vals;
+}
+
+export const getLastAllow = async () => {
+  let last_allow = null;
+
+  const currentUserId = auth.currentUser.uid
+  const currentUserEnergyRef = firebase.firestore().collection('users').doc(currentUserId);
+
+  await currentUserEnergyRef
+          .collection("energyEntries")
+          .orderBy("timestamp", "desc")
+          .limit(1)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              last_allow = doc.data().timestamp;
+            })
+          });
+  return last_allow;
 }

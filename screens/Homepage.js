@@ -11,9 +11,10 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
 import styles from "./styles/HomepageStyles";
-import { getStoredScore, getStoredVal } from "../score";
+import { getStoredScore, getStoredVal, addScore } from "../score";
 import { useIsFocused } from "@react-navigation/native";
-import { resetScore } from "../score"; // for resetting scores, delete before release
+//import { resetScore } from "../score"; // for resetting scores, delete before release
+import  { getScore as GetScore, getVal as GetVal } from "../config/firebase";
 
 const Homepage = () => {
   const isFocused = useIsFocused();
@@ -36,7 +37,9 @@ const Homepage = () => {
   });
 
   // Fetches user data from the users collection in database using their uid (unique id)
+
   useEffect(() => {
+  
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         db.collection("users")
@@ -63,11 +66,14 @@ const Homepage = () => {
   }, []);
 
   async function getScore() {
-    setScore(await getStoredScore());
+    await addScore();
+    setScore(await GetScore());
+    //setScore(await getStoredScore());
   }
 
   async function getValues() {
-    setValues(await getStoredVal());
+    setValues(await GetVal());
+    //setValues(await getStoredVal())
   }
 
   useEffect(() => {
@@ -88,15 +94,24 @@ const Homepage = () => {
     );
   }
 
+  /*
+  async function handleUpdate() {
+    await getScore();
+    await getValues();
+  }
+
   // function to reset scores; delete before release
   async function resetHandler() {
     await resetScore();
+    
     setScore(150);
     setValues({ electricity: 0, food: 0, transportation: 0 });
     console.log(
       "Homepage.js: scores reset, remember to delete button and function before release"
     );
+    
   }
+  */
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -132,7 +147,7 @@ const Homepage = () => {
         </View>
       </View>
 
-      {/* Button to reset scores; delete before release */}
+      {/* Button to reset scores; delete before release 
       <View>
         <TouchableOpacity
           onPress={() => {
@@ -142,6 +157,19 @@ const Homepage = () => {
           <Text>Reset</Text>
         </TouchableOpacity>
       </View>
+      */}
+      {/*
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            handleUpdate();
+          }}
+        >
+          <Text>Update</Text>
+        </TouchableOpacity>
+      </View>
+      */}
+      
     </KeyboardAvoidingView>
   );
 };
