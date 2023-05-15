@@ -5,16 +5,8 @@ import { Slider } from "@miblanchard/react-native-slider";
 import { addEnergyEntry } from "../config/firebase";
 import { getStoredScore, getStoredVal, electricityVal, allowElectricityEntry } from "../score";
 
-{/* Screen contains a dropdown menu for item type and purchase location. A third-party library, React Native Dropdown Picker, was
-used for this and its proper usage is documented at https://hossein-zare.github.io/react-native-dropdown-picker-website/docs/usage
-
-Screen also contains a slider for setting purchase amounts. A third-party library, react-native-slider, was
-used for this and its proper usage is documented at https://github.com/miblanchard/react-native-slider */}
-
 const AddEnergyScreen = () => {
-  {/* For opening and closing energy dropdown menus and saving value of chosen energy type e.g. when openEnergy
-is true, the food dropdown menu is open. Possible values of valueEnergy are "Gas" or "Electricity". valueEnergy
-is sent to score.js to calculate score changes. */}
+  {/* For opening and closing energy dropdown menus and saving value of chosen energy type */}
   const [openEnergy, setOpenEnergy] = useState(false);
   const [valueEnergy, setValueEnergy] = useState(null);
 
@@ -28,41 +20,37 @@ is sent to score.js to calculate score changes. */}
   {/* For updating energy amounts on slider */}
   const [amount, setAmount] = useState(1);
 
-  {/* Sets setting minimum energy amount on slider */}
+  {/* For updating energy amounts on slider */}
   const [minAmount, setMinAmount] = useState(1);
 
-  {/* Sets setting maximum energy amount on slider */}
+  {/* For updating energy amounts on slider */}
   const [maxAmount, setMaxAmount] = useState(500);
+
   const [allow, setAllow] = useState('none');
   const [time, setTime] = useState(null);
 
-  {/* Calls on addEnergyEntry() function from firebase.js to create Firestore entry. Also calls on electricityVal()
-function from score.js to calculate the resulting score change and update the user's score accordingly. */}
   async function submitHandler() {
     if (valueEnergy != "" && valueEnergy != null) {
       const score_change = await electricityVal('NYC', amount); // update current score
       
-      // construct current date as a parameter to add to Firestore database
       const day = new Date().getDate();
       const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
       const date = month + '/' + day + '/' + year;
 
-      addEnergyEntry(amount, valueEnergy, date, score_change); // add to database
-      alert("Energy score change: " + score_change);
+      await addEnergyEntry(amount, valueEnergy, date, score_change, Date.now()); // add to database
 
       isAllow(valueEnergy);
 
       console.log("AddEnergyScreen.js: Energy:", valueEnergy);
       console.log("AddEnergyScreen.js: Amount:", amount);
       console.log("AddEnergyScreen.js: Score change:", score_change);
+      alert("Energy score change: " + score_change);
       console.log("AddEnergyScreen.js: Current score", await getStoredScore());
       console.log("AddEnergyScreen.js: Val Summary", await getStoredVal());
     }
-    else {
-      alert("Invalid entry");
+    else
       console.log("AddEnergyScreen.js: Values not set");
-    }
   }
 
   async function isAllow(val) {
@@ -80,7 +68,7 @@ function from score.js to calculate the resulting score change and update the us
         const seconds = Math.floor(diff / 1000) % 60;
         setTime("You need to wait\n" + 
           `${days}d ${hours}h ${minutes}m ${seconds}s\n` + 
-          "before making new energy entry");
+          "before making new electricity entry");
       }
     }
     else {
@@ -135,9 +123,19 @@ function from score.js to calculate the resulting score change and update the us
             <Text style={styles.submitButtonText}>Add</Text>
           </TouchableOpacity>
         </View>
-        <View style={[{display: allow}, styles.block]}>
-          <Text style={{lineHeight: 20, fontSize: 15}}>{time}</Text>
-        </View>
+        {(valueEnergy == 'Electricity' || valueEnergy == 'Gas') ? (valueEnergy == 'Electricity') ?
+          <>
+            <View style={[{display: allow}, styles.block]}>
+              <Text style={{lineHeight: 20, fontSize: 15, fontWeight: 'bold'}}>{time}</Text>
+            </View>
+          </> :
+          <>
+            <View style={styles.block}>
+              <Text style={{lineHeight: 20, fontSize: 15, fontWeight: 'bold'}}>Coming Soon...</Text>
+            </View>
+          </> :
+          <></>}
+        
       </View>
     </View>
   );

@@ -17,20 +17,21 @@ const LeaderboardScreen = () =>  {
   const getUsersData = () => {
     let temp = [];
     db.collection("users")
-      .orderBy('userName', 'desc')
+      .orderBy('score', 'desc')
       .limit(50)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           let user_name = doc.data().userName;
+          let score = doc.data().score;
           
           temp.push({
             id: doc.id,
             name: user_name,
-            score: Math.round(Math.random() * 100)
+            score: score
           });
         })
-        temp.sort((a, b) => b.score - a.score);
+        //temp.sort((a, b) => b.score - a.score);
         setUsers(temp);
         setIsRefresh(false);
       })
@@ -91,6 +92,13 @@ const LeaderboardScreen = () =>  {
     );
   }
 
+  const getPos = (index) => {
+    let current_index = index;
+    while(current_index > 0 && users[index].score == users[current_index - 1].score) {
+      current_index--;
+    }
+    return current_index;
+  }
   
   if(users != []) {
     return (
@@ -106,7 +114,7 @@ const LeaderboardScreen = () =>  {
               return (<Item 
                         name={item.name} 
                         score={item.score} 
-                        position={index}
+                        position={getPos(index)}
                         id = {item.id} />
               )}
             }

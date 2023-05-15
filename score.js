@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import { UpdateScore, UpdateLastAdd, getLastAdd, getScore, getLastAllow } from './config/firebase';
 
 //Return the values stored in the local storage.
 export async function getStoredVal() {
@@ -65,11 +66,13 @@ async function resetVals() {
 //Add 15 if true.
 export async function addScore() {
     try {
-        let last_add = Number(await SecureStore.getItemAsync("lastAddTime"));
-        if(last_add == undefined) {
-            const new_score = updateScore(150);
+        //let last_add = Number(await SecureStore.getItemAsync("lastAddTime"));
+        let last_add = Number(await getLastAdd());
+        if(Number.isNaN(last_add)) {
+            const new_score = await updateScore(150);
             if(new_score != undefined) {
-                await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
+                //await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
+                await UpdateLastAdd(Date.now());
                 await resetVals();
                 return new_score;
             }
@@ -78,9 +81,10 @@ export async function addScore() {
         const day = 24 * 60 * 60 * 1000;
         let num_of_days = Math.floor((Date.now() - last_add) / day);
         if(num_of_days > 0) {
-            const new_score = updateScore(150);
+            const new_score = await updateScore(150);
             if(new_score != undefined) {
-                await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
+                //await SecureStore.setItemAsync("lastAddTime", String(Date.now()));
+                await UpdateLastAdd(Date.now());
                 await resetVals();
                 return new_score;
             }
@@ -93,20 +97,25 @@ export async function addScore() {
 //Update the score.
 async function updateScore(adjust) {
     try {
-        let prev_score = Number(await SecureStore.getItemAsync("score"));
+        //let prev_score = Number(await SecureStore.getItemAsync("score"));
+        let prev_score = Number(await getScore());
         if(Number.isNaN(prev_score)) {
-            await SecureStore.setItemAsync("score", String(150));
+            //await SecureStore.setItemAsync("score", String(150));
+            await UpdateScore(150); 
             prev_score = 150;
+            return 150;
         }
         const new_score = Number(prev_score) + adjust;
         if(new_score != undefined) {
-            await SecureStore.setItemAsync("score", String(new_score));
+            //await SecureStore.setItemAsync("score", String(new_score));
+            await UpdateScore(new_score);
         }
         return new_score;
     } catch (error) {
         console.log(error);
     }
 }
+
 
 // Reset the score; delete before release
 export async function resetScore() {
@@ -119,6 +128,7 @@ export async function resetScore() {
         console.log(error);
     }
 }
+
 
 //Emission factors for calculating food value.
 const meat_factor = {
@@ -240,7 +250,7 @@ export async function electricityVal(location, usage) {
                 
                 if(new_score != undefined) {
                     await saveVal(val, "electricity");
-                    await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
+                    //await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
                     return val;
                 }
             }
@@ -257,9 +267,10 @@ export async function electricityVal(location, usage) {
 //entry.
 export async function allowElectricityEntry() {
     try {
-        const last_allow = Number(await SecureStore.getItemAsync("lastAllowTime"));
+        //const last_allow = Number(await SecureStore.getItemAsync("lastAllowTime"));
+        const last_allow = await getLastAllow();
         if(last_allow == undefined) {
-            await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
+            //await SecureStore.setItemAsync('lastAllowTime', String(Date.now()));
             return 0;
         }
 
