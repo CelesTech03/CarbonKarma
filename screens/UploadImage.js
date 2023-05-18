@@ -39,22 +39,24 @@ function UploadImage() {
 
   const uploadAvatar = async () => {
     try {
-      const response = await fetch(avatar);
-      const blob = await response.blob();
+      // If no avatar, skips the upload and proceeds to logging in
+      if (avatar) {
+        const response = await fetch(avatar);
+        const blob = await response.blob();
 
-      const storageRef = firebase.storage().ref();
-      const avatarRef = storageRef.child(
-        `avatars/${firebase.auth().currentUser.uid}`
-      );
+        const storageRef = firebase.storage().ref();
+        const avatarRef = storageRef.child(
+          `avatars/${firebase.auth().currentUser.uid}`
+        );
 
-      await avatarRef.put(blob);
+        await avatarRef.put(blob);
 
-      const avatarUrl = await avatarRef.getDownloadURL();
-      // Update the user's profile with the image URL
-      await firebase.auth().currentUser.updateProfile({
-        photoURL: avatarUrl,
-      });
-
+        const avatarUrl = await avatarRef.getDownloadURL();
+        // Update the user's profile with the image URL
+        await firebase.auth().currentUser.updateProfile({
+          photoURL: avatarUrl,
+        });
+      }
       // Navigate to the next screen (homepage)
       logIn();
     } catch (error) {

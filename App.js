@@ -100,7 +100,6 @@ or onboarding screen. */}
               <Stack.Screen name="FirstGas" component={FirstGas} />
               <Stack.Screen name="FirstSolar" component={FirstSolar} />
               <Stack.Screen name="UploadImage" component={UploadImage} />
-              <Stack.Screen name="Homepage" component={Homepage} />
             </>
             )) : (
             <> 
@@ -114,7 +113,6 @@ or onboarding screen. */}
               <Stack.Screen name="History" component={HistoryScreen} />
               <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
               <Stack.Screen name="AddEnergy" component={AddEnergyScreen} />
-              <Stack.Screen name="UploadImage" component={UploadImage} />
             </>
           )}
         </Stack.Navigator>

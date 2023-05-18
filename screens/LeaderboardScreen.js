@@ -81,7 +81,7 @@ const LeaderboardScreen = () =>  {
         <View style={styles.image_container}>
           <Image 
               style={[styles.image, {borderColor: border_color}]}
-              source={require("../assets/who_pokemon.jpg")} />
+              source={require("../assets/avatarPlaceholder.png")} />
               <Text style={styles.info}>{props.position + 1}</Text>
         </View>
         <View style={styles.detail_container}>
