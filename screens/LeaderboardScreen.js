@@ -59,13 +59,13 @@ const LeaderboardScreen = () =>  {
   const Item = (props) => {
     const container_style = [styles.item_container]
 
-    let border_color = 'skyblue';
+    let border_color = 'white';
     if(props.position <= 2) {
       if(props.position == 0) {
-        border_color = 'gold';
+        border_color = '#bf9b30';
       }
       else if(props.position == 1) {
-        border_color = 'silver';
+        border_color = '#71706e';
       }
       else if(props.position == 2) {
         border_color = '#722626';
@@ -73,7 +73,7 @@ const LeaderboardScreen = () =>  {
     }
 
     if(props.id === currentUser.uid) {
-      container_style.push({backgroundColor: 'lightblue'});
+      container_style.push({backgroundColor: '#e0e0e0'});
     }
       
     return (
@@ -86,7 +86,9 @@ const LeaderboardScreen = () =>  {
         </View>
         <View style={styles.detail_container}>
           <Text style={styles.info}>{props.name}</Text>
-          <Text style={styles.info}>Score: {props.score}</Text>
+        </View> 
+        <View style={styles.score_item}>
+          <Text>Score: {props.score}</Text>
         </View> 
       </View>   
     );
