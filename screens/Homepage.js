@@ -121,7 +121,7 @@ const Homepage = () => {
           source={
             userAvatarURL
               ? { uri: userAvatarURL }
-              : require("../assets/who_pokemon.jpg")
+              : require("../assets/avatarPlaceholder.png")
           }
           style={styles.avatar}
         />
