@@ -24,11 +24,13 @@ const LeaderboardScreen = () =>  {
         snapshot.forEach((doc) => {
           let user_name = doc.data().userName;
           let score = doc.data().score;
+          let address = doc.data().address;
           
           temp.push({
             id: doc.id,
             name: user_name,
-            score: score
+            score: score,
+            address: address,
           });
         })
         //temp.sort((a, b) => b.score - a.score);
@@ -86,6 +88,7 @@ const LeaderboardScreen = () =>  {
         </View>
         <View style={styles.detail_container}>
           <Text style={styles.info}>{props.name}</Text>
+          <Text>{props.address}</Text>
         </View> 
         <View style={styles.score_item}>
           <Text>Score: {props.score}</Text>
@@ -116,6 +119,7 @@ const LeaderboardScreen = () =>  {
               return (<Item 
                         name={item.name} 
                         score={item.score} 
+                        address={item.address}
                         position={getPos(index)}
                         id = {item.id} />
               )}
