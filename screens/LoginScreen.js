@@ -21,6 +21,14 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "react-native-paper";
 
+/* 
+References:
+Firebase Authentication Documentation: https://firebase.google.com/docs/auth/web/password-auth,
+Formik validation schema: https://formik.org/docs/guides/validation,
+Youtube Formik Validation: https://www.youtube.com/watch?v=LtfSb5Yk6a8,
+Youtube Firebase Authentication: https://www.youtube.com/watch?v=ql4J6SpLXZA,
+*/
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
@@ -36,7 +44,6 @@ const LoginSchema = Yup.object().shape({
 const LoginScreen = () => {
   const navigation = useNavigation();
   const { colors } = useTheme();
-
   const { logIn } = useContext(AuthContext);
 
   // Firebase Login
@@ -205,6 +212,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-// Gets device screen dimensions
-const { height } = Dimensions.get("screen");

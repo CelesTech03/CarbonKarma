@@ -20,6 +20,11 @@ import {
   MEASUREMENT_ID,
 } from "@env";
 
+/* 
+References:
+Firebase Manage Users Documentation: https://firebase.google.com/docs/auth/web/manage-users,
+*/
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
