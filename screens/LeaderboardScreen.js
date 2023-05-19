@@ -4,16 +4,24 @@ import styles from "./styles/LeaderboardStyle"
 import { FlatList, StatusBar, Image } from "react-native";
 import firebase from "firebase/compat/app";
 import { useIsFocused } from "@react-navigation/native";
+import "firebase/compat/storage";
 
 const LeaderboardScreen = () =>  {
   const isFocused = useIsFocused();
 
+  //Stored data of the current login user
   const [currentUser, setCurrentUser] = useState(null);
+
+  //For refreshing the leaderboard
   const [isRefresh, setIsRefresh] = useState(false);
+
+  //Stored the list of users in the leaderboard
   const [users, setUsers] = useState([]);
 
   const db = firebase.firestore();
 
+  //Fetch the top 50 users ordered by their score
+  //and stored in users.
   const getUsersData = () => {
     let temp = [];
     db.collection("users")
@@ -33,7 +41,6 @@ const LeaderboardScreen = () =>  {
             address: address,
           });
         })
-        //temp.sort((a, b) => b.score - a.score);
         setUsers(temp);
         setIsRefresh(false);
       })
@@ -58,9 +65,13 @@ const LeaderboardScreen = () =>  {
     return () => unsubscribe();
   }, [isFocused]);
 
+  //Component for each user in the leaderboard
   const Item = (props) => {
+    const [userAvatarURL, setUserAvatarURL] = useState(null);
+
     const container_style = [styles.item_container]
 
+    //Outline of the avatar of the users
     let border_color = 'white';
     if(props.position <= 2) {
       if(props.position == 0) {
@@ -74,16 +85,30 @@ const LeaderboardScreen = () =>  {
       }
     }
 
+    //Hightlight the current user in the leaderboard
     if(props.id === currentUser.uid) {
       container_style.push({backgroundColor: '#e0e0e0'});
     }
+
+    const avatarRef = firebase.storage().ref().child(`avatars/${props.id}`);
+        avatarRef
+          .getDownloadURL()
+          .then((url) => {
+            setUserAvatarURL(url);
+          })
+          .catch((error) => {
+            console.log("Error getting user avatar from storage: ", error);
+          });
       
     return (
       <View style={container_style}>
+        {/* Avatar image */}
         <View style={styles.image_container}>
           <Image 
               style={[styles.image, {borderColor: border_color}]}
-              source={require("../assets/avatarPlaceholder.png")} />
+              source={userAvatarURL
+                ? { uri: userAvatarURL }
+                : require("../assets/avatarPlaceholder.png")} />
               <Text style={styles.info}>{props.position + 1}</Text>
         </View>
         <View style={styles.detail_container}>
@@ -97,6 +122,7 @@ const LeaderboardScreen = () =>  {
     );
   }
 
+  //Return the rank of the users in the leaderboard
   const getPos = (index) => {
     let current_index = index;
     while(current_index > 0 && users[index].score == users[current_index - 1].score) {
@@ -109,9 +135,11 @@ const LeaderboardScreen = () =>  {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar hidden={true} />
+        {/* Title */}
         <View style={styles.title_container}>
           <Text style={styles.title}>Leaderboard</Text>
         </View>
+        {/* Leaderboard content */}
         <View style={styles.items_container}>
           <FlatList  
             data={users}

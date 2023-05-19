@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+//Leaderboard screen styling
 export default StyleSheet.create({
     container: {
         textAlign: "center",

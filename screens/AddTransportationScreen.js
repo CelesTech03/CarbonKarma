@@ -12,7 +12,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import styles from "./styles/AddTransportationStyle";
 import { addTransport } from "../config/firebase";
-import { getStoredScore, getStoredVal, transVal } from "../score";
+import { transVal } from "../score";
 
 const AddTransportationScreen = () => {
   //values for dropdown
@@ -31,17 +31,8 @@ const AddTransportationScreen = () => {
   //values for slider
   const [mileage, setMileage] = useState(0);
 
+  //for setting the display of the warning text
   const [warning, setWarning] = useState('none')
-
-  const onSubmit = () => {
-    setMileage(0);
-    setValue(null);
-    setModalVisible(true);
-  };
-
-  //values for submission result modal
-  const [modalVisible, setModalVisible] = useState(false);
-  const score = 500;
   
   {/* Calls on addTransport() function from firebase.js to create Firestore entry. Also calls on transVal()
   function from score.js to calculate the resulting score change and update the user's score accordingly. */}
@@ -60,8 +51,6 @@ const AddTransportationScreen = () => {
       console.log("Method: ", value);
       console.log("Mileage: ", parseInt(mileage));
       console.log("AddTransScreen.js: Score change:", score_change);
-      console.log("AddTransScreen.js: Current score", await getStoredScore());
-      console.log("AddTransScreen.js: Val Summary", await getStoredVal());
     }
     else {
       alert("Invalid entry");
@@ -69,6 +58,9 @@ const AddTransportationScreen = () => {
     }
   }
 
+  //Handler for changes in input mileage value.
+  //Checks if the value only contains numerical characters.
+  //Update mileage if true and otherwise display a warning text.
   function handleValueChange(value) {
     if(String(value).match("^[0-9]*$")) {
       setMileage(value);
@@ -78,6 +70,7 @@ const AddTransportationScreen = () => {
       setWarning('flex');
     }
   }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Transportation</Text>
@@ -112,6 +105,7 @@ const AddTransportationScreen = () => {
           />
           <Text>miles</Text>
         </View>
+        {/* Warning text */}
         <Text style={{color: 'red', display: warning}}>Please only input numbers 0 - 9!</Text>
         <Slider
           value={mileage}
@@ -129,23 +123,6 @@ const AddTransportationScreen = () => {
         <Text>Submit</Text>
       </TouchableOpacity>
 
-      {/* display the result of the submission */}
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.submissionResult}>
-          <Text style={styles.title}>Submission Success!</Text>
-          <Text style={styles.title}>Your new score is {score}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </View>
   );
 };

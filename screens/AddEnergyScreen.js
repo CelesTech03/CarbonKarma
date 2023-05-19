@@ -3,7 +3,7 @@ import { React, useState, useCallback, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { addEnergyEntry } from "../config/firebase";
-import { getStoredScore, getStoredVal, electricityVal, allowElectricityEntry } from "../score";
+import { electricityVal, allowElectricityEntry } from "../score";
 
 const AddEnergyScreen = () => {
   {/* For opening and closing energy dropdown menus and saving value of chosen energy type */}
@@ -26,6 +26,7 @@ const AddEnergyScreen = () => {
   {/* For updating energy amounts on slider */}
   const [maxAmount, setMaxAmount] = useState(500);
 
+  {/* For setting the display of the overlay */}
   const [allow, setAllow] = useState('none');
   const [time, setTime] = useState(null);
 
@@ -46,13 +47,15 @@ const AddEnergyScreen = () => {
       console.log("AddEnergyScreen.js: Amount:", amount);
       console.log("AddEnergyScreen.js: Score change:", score_change);
       alert("Energy score change: " + score_change);
-      console.log("AddEnergyScreen.js: Current score", await getStoredScore());
-      console.log("AddEnergyScreen.js: Val Summary", await getStoredVal());
     }
     else
       console.log("AddEnergyScreen.js: Values not set");
   }
 
+  //Checks if the user is allow to make an new electricity entry.
+  //If allowed, the overlay will not be shown.
+  //If not allowed, an overlay will be displayed with text telling
+  //user the time the user needed to wait before making new submission.
   async function isAllow(val) {
     if(val == 'Electricity') {
       const diff = await allowElectricityEntry();
@@ -123,6 +126,7 @@ const AddEnergyScreen = () => {
             <Text style={styles.submitButtonText}>Add</Text>
           </TouchableOpacity>
         </View>
+        {/* Overlays for preventing user from making new submission */}
         {(valueEnergy == 'Electricity' || valueEnergy == 'Gas') ? (valueEnergy == 'Electricity') ?
           <>
             <View style={[{display: allow}, styles.block]}>

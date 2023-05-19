@@ -9,7 +9,6 @@ import { UpdatePass, auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import { UpdateEmail, UpdateLoc } from "../config/firebase";
 import * as Yup from "yup";
-import { resetScore } from "../score";
 
 import { AuthContext } from "../AuthContext";
 

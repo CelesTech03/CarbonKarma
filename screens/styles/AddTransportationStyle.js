@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native'
 
+//Add Transportation screen styling
 export default StyleSheet.create({
     container: {
         flex: 1,
