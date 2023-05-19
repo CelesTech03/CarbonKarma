@@ -101,7 +101,6 @@ const SettingsScreen = ({ navigation }) =>  {
         onPress={() => 
           signOut(auth)
           .then(() => {
-            resetScore()
             console.log('The User Signed Out.')
             handleLogOut()
           })}>

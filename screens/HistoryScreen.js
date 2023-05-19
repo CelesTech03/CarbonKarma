@@ -9,10 +9,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { LinearGradient } from 'expo-linear-gradient';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
-{/* Screen contains a third-party library, react-native-easy-grid, for displaying information in a table. Its proper usage is documented at
-https://github.com/GeekyAnts/react-native-easy-grid *
-
-Screen also uses a third-party library for displaying gradient backgrounds, react-native-linear-gradient. Its proper usage is documented at
+{/* Screen also uses a third-party library for displaying gradient backgrounds, react-native-linear-gradient. Its proper usage is documented at
 https://blog.logrocket.com/complex-gradients-react-native-linear-gradient/ */}
 
 const HistoryScreen = ({ navigation }) =>  {
@@ -22,7 +19,6 @@ const HistoryScreen = ({ navigation }) =>  {
   const [foodOrders, setFoodOrders] = useState(null);
   const [energyOrders, setEnergyOrders] = useState(null);
   const [transportOrders, setTransportOrders] = useState(null);
-  const [headers, setHeaders] = useState(['Date','Item','Location','Amount','Karma']);
 
   { /* For choosing which button to highlight; default is 0 for Food button; set to 1 for Energy; set to 2 for Transportation */ }
   const [buttons, setButtons] = useState(0);
@@ -32,7 +28,7 @@ const HistoryScreen = ({ navigation }) =>  {
     if (isFocused) {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          // get the foodOrders collection
+          // get the foodOrders collection and add all documentions in the collection to a temp array
           db.collection("users")
             .doc(user.uid).collection("foodOrders").orderBy("date", "desc")
             .get()
@@ -47,7 +43,7 @@ const HistoryScreen = ({ navigation }) =>  {
               //console.log(foodOrders.length)
             });
 
-          // get the energyEntries collection
+          // get the energyEntries collection and add all documentions in the collection to a temp array
           db.collection("users")
             .doc(user.uid).collection("energyEntries").orderBy("date", "desc")
             .get()
@@ -61,7 +57,7 @@ const HistoryScreen = ({ navigation }) =>  {
               setEnergyOrders(temp);
             });
 
-          // get the foodOrders collection
+          // get the foodOrders collection and add all documentions in the collection to a temp array
           db.collection("users")
             .doc(user.uid).collection("UserTransports").orderBy("date", "desc")
             .get()
@@ -90,9 +86,12 @@ const HistoryScreen = ({ navigation }) =>  {
     );
   }
 
+  { /* If buttons == 0, display all the user's past Food entries. If buttons == 1, display all the user's past Energy entries.
+  Otherwise, display all the user's past Transportation entries. Clicking one of the buttons near the top of the screen updates the
+  value of buttons variable. */ }
   if (buttons == 0) {
     return (
-      <KeyboardAwareScrollView contentContainerStyle={styles.container} behavior="padding" >
+      <KeyboardAwareScrollView contentContainerStyle={styles.container} behavior="padding">
         <LinearGradient
           // Background Linear Gradient
           colors={['rgba(0,0,255,0.75)', 'transparent']}

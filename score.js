@@ -116,20 +116,6 @@ async function updateScore(adjust) {
     }
 }
 
-
-// Reset the score; delete before release
-export async function resetScore() {
-    try {
-        await SecureStore.setItemAsync("score", String(150));
-        await resetVals();
-        console.log('score.js: resetScore has been called, remember to delete function before release');
-        await SecureStore.deleteItemAsync('lastAllowTime');
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-
 //Emission factors for calculating food value.
 const meat_factor = {
     "Poultry": [0.468, 0.525],
