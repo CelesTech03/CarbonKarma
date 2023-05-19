@@ -18,6 +18,7 @@ function UploadImage() {
   const navigation = useNavigation();
   const [avatar, setAvatar] = useState(null);
 
+  // Asks user for device image permissions and launches image picker
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -66,6 +67,7 @@ function UploadImage() {
 
   return (
     <View style={styles.container}>
+      {/* Allows user to pick an image */}
       <TouchableOpacity style={styles.avatarPlaceholder} onPress={pickImage}>
         {avatar ? (
           <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -74,7 +76,7 @@ function UploadImage() {
         )}
       </TouchableOpacity>
 
-      {/*Bottom Nav buttons here */}
+      {/* Bottom navigation buttons */}
       <TouchableOpacity
         style={styles.Backbutton}
         activeOpacity={0.5}

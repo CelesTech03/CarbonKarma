@@ -4,7 +4,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Dimensions,
 } from "react-native";
 import { React, useContext } from "react";
 import styles from "./styles/LoginScreen";
@@ -23,7 +22,14 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "react-native-paper";
 
-// Formik validation schema: https://formik.org/docs/guides/validation
+/* 
+References:
+Firebase Authentication Documentation: https://firebase.google.com/docs/auth/web/password-auth,
+Formik validation schema: https://formik.org/docs/guides/validation,
+Youtube Formik Validation: https://www.youtube.com/watch?v=LtfSb5Yk6a8,
+Youtube Firebase Authentication: https://www.youtube.com/watch?v=ql4J6SpLXZA,
+*/
+
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
     .min(3, "Too Short!")
@@ -343,6 +349,3 @@ const RegisterScreen = () => {
 };
 
 export default RegisterScreen;
-
-// Gets device screen dimensions
-const { height } = Dimensions.get("screen");

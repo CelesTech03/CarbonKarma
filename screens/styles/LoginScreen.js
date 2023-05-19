@@ -1,7 +1,12 @@
 import { StyleSheet, Platform } from "react-native";
 
-// Login screen styling
-// Reference: https://www.youtube.com/watch?v=Rs72pRwXIzA
+/* 
+References:
+Expo Font Awesome: https://docs.expo.dev/guides/icons/,
+Expo Linear Gradient Package Documentation: https://docs.expo.dev/versions/latest/sdk/linear-gradient/?utm_source=google&utm_medium=cpc&utm_content=performancemax&gclid=Cj0KCQjwmZejBhC_ARIsAGhCqneYZcC-o_XQgrBfAJ6Wfe3jV1ATjQE2TsH-ekLgfQ7jLLxb2Ghhw6QaAmC8EALw_wcB,
+Youtube: https://www.youtube.com/watch?v=Rs72pRwXIzA,
+*/
+
 export default StyleSheet.create({
   container: {
     flex: 1,
