@@ -99,18 +99,6 @@ const Homepage = () => {
     await getScore();
     await getValues();
   }
-
-  // function to reset scores; delete before release
-  async function resetHandler() {
-    await resetScore();
-    
-    setScore(150);
-    setValues({ electricity: 0, food: 0, transportation: 0 });
-    console.log(
-      "Homepage.js: scores reset, remember to delete button and function before release"
-    );
-    
-  }
   */
 
   return (
@@ -128,7 +116,7 @@ const Homepage = () => {
       </View>
       <View style={styles.scoresContainer}>
         <View style={styles.score}>
-          <Text style={styles.dailyScoreLabel}>Daily Score</Text>
+          <Text style={styles.dailyScoreLabel}>Score</Text>
           <Text style={styles.dailyScoreValue}>{score}</Text>
         </View>
         <View style={styles.rowContainer}>

@@ -46,7 +46,7 @@ const AddTransportationScreen = () => {
   {/* Calls on addTransport() function from firebase.js to create Firestore entry. Also calls on transVal()
   function from score.js to calculate the resulting score change and update the user's score accordingly. */}
   async function submitTransportHandler() {
-    if (value != null) {
+    if (value != null && parseInt(mileage) > 0) {
       const score_change = await transVal(value, mileage);
       
       const day = new Date().getDate();
