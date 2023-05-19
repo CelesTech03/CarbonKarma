@@ -41,8 +41,8 @@ export default StyleSheet.create({
     },
     image: {
         borderWidth: 3,
-        width: 90, 
-        height: 90,
+        width: 85, 
+        height: 85,
         borderRadius: 45,
     },
     score_item: {
