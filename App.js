@@ -26,6 +26,12 @@ import { auth } from "./config/firebase";
 
 import { LogBox } from 'react-native';
 
+
+/* 
+References:
+React Navigation Documentation: https://reactnavigation.org/docs/getting-started
+*/
+
 //Ignore all log notifications
 LogBox.ignoreAllLogs();
 

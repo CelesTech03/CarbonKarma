@@ -11,9 +11,8 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
 import styles from "./styles/HomepageStyles";
-import { getStoredScore, getStoredVal, addScore } from "../score";
+import { addScore } from "../score";
 import { useIsFocused } from "@react-navigation/native";
-//import { resetScore } from "../score"; // for resetting scores, delete before release
 import  { getScore as GetScore, getVal as GetVal } from "../config/firebase";
 
 const Homepage = () => {
@@ -134,29 +133,6 @@ const Homepage = () => {
           </View>
         </View>
       </View>
-
-      {/* Button to reset scores; delete before release 
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            resetHandler();
-          }}
-        >
-          <Text>Reset</Text>
-        </TouchableOpacity>
-      </View>
-      */}
-      {/*
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            handleUpdate();
-          }}
-        >
-          <Text>Update</Text>
-        </TouchableOpacity>
-      </View>
-      */}
       
     </KeyboardAvoidingView>
   );

@@ -23,6 +23,7 @@ import {
 /* 
 References:
 Firebase Manage Users Documentation: https://firebase.google.com/docs/auth/web/manage-users,
+Firebase Authentication Persistence: https://firebase.google.com/docs/auth/web/auth-state-persistence
 */
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -51,7 +52,7 @@ if (firebase.apps.length == 0) {
 let auth = getAuth(app);
 if(auth == undefined) {
   auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
+    persistence: getReactNativePersistence(AsyncStorage) //enable authentication persistence
   });
 }
 
@@ -285,18 +286,22 @@ export const UpdatePass = async (new_password) => {
 }
 
 export const UpdateScore = async (new_score) => {
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = doc(db, "users", currentUserId)
 
+  //Updates the score
   await updateDoc(currentUserDocRef, {
     score: new_score
   })
 }
 
 export const UpdateLastAdd = async (timestamp) => {
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = doc(db, "users", currentUserId)
 
+  //Updates the last add time
   await updateDoc(currentUserDocRef, {
     lastAddTime: timestamp
   })
@@ -305,8 +310,11 @@ export const UpdateLastAdd = async (timestamp) => {
 export const getLastAdd = async () => {
   let lastAdd = null;
 
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
+
+  //Gets the last add time
   await currentUserDocRef
     .get()
     .then((snapshot) => {
@@ -320,9 +328,11 @@ export const getLastAdd = async () => {
 export const getScore = async () => {
   let score = null;
 
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
 
+  //Gets the score
   await currentUserDocRef
     .get()
     .then((snapshot) => {
@@ -341,6 +351,7 @@ export const getVal = async () => {
     transportation: 0
   };
 
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserDocRef = firebase.firestore().collection("users").doc(currentUserId);
 
@@ -349,6 +360,8 @@ export const getVal = async () => {
   const year = new Date().getFullYear();
   const date = month + '/' + day + '/' + year;
 
+  //Gets the score change of all transportation entry submissions
+  //made in current day.
   await currentUserDocRef
     .collection("UserTransports")
     .where("date", "==", date)
@@ -359,6 +372,8 @@ export const getVal = async () => {
       });
     });
 
+  //Gets the score change of all energy entry submissions
+  //made in current day.  
   await currentUserDocRef
     .collection("energyEntries")
     .where("date", "==", date)
@@ -369,6 +384,8 @@ export const getVal = async () => {
       });
     });
 
+  //Gets the score change of all food entry submissions
+  //made in current day.
   await currentUserDocRef
     .collection("foodOrders")
     .where("date", "==", date)
@@ -384,9 +401,11 @@ export const getVal = async () => {
 export const getLastAllow = async () => {
   let last_allow = null;
 
+  // Gets the current User
   const currentUserId = auth.currentUser.uid
   const currentUserEnergyRef = firebase.firestore().collection('users').doc(currentUserId);
 
+  //Gets the timestamp of the most recent electricity entry submission
   await currentUserEnergyRef
           .collection("energyEntries")
           .orderBy("timestamp", "desc")

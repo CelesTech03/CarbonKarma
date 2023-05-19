@@ -3,7 +3,7 @@ import { React, useState, useCallback } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Slider } from "@miblanchard/react-native-slider";
 import { addFoodOrder } from "../config/firebase";
-import { foodVal, getStoredScore, getStoredVal } from "../score";
+import { foodVal } from "../score";
 
 {/* Screen contains a dropdown menu for item type and purchase location. A third-party library, React Native Dropdown Picker, was
 used for this and its proper usage is documented at https://hossein-zare.github.io/react-native-dropdown-picker-website/docs/usage
@@ -102,8 +102,6 @@ function from score.js to calculate the resulting score change and update the us
       console.log("AddFoodScreen.js: Location:", valueLoc);
       console.log("AddFoodScreen.js: Amount:", amount);
       console.log("AddFoodScreen.js: Score change:", score_change);
-      console.log("AddFoodScreen.js: Current score", await getStoredScore());
-      console.log("AddFoodScreen.js: Val Summary", await getStoredVal());
     }
     else {
       alert("Invalid entry");
